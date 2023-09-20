@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "SimX Revival"
+title:  "SimX Devblog 0: Revisiting SimX"
 date:   2023-09-13
 category: simx
 ---

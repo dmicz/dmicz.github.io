@@ -35,7 +35,7 @@ defaults:
     path: "assets/img"
   values:
     image: true
-
+future: true
 
 # Exclude from processing.
 # The following items will not be processed, by default.
