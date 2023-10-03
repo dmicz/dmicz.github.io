@@ -5,7 +5,7 @@ date:   2023-09-20
 category: simx
 ---
 
-In case you haven't read the [last post]({{ site.baseurl }}{% link _posts/2023-09-13-simx-revisit.markdown %}), the following project is inspired by my previous work on a basic physics simulator.
+In case you haven't read the [last post](/_posts/2023-09-13-simx-revisit.markdown/), the following project is inspired by my previous work on a basic physics simulator.
 
 ## Project Goals 
 

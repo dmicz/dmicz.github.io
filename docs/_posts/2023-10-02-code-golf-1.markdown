@@ -1,0 +1,666 @@
+---
+layout: post
+title:  "Code Golf: Challenge 1"
+date:   2023-10-02
+category: code-golf
+---
+
+Welcome to my first post about code golf! I am still working on SimX, but was recently challenged to do a code golf challenge in my computer science class covering Python.
+
+As I write this post and its updates the code golf contest is ongoing, so this is published a week after I finished working on the contest. 
+
+# Contents
+1. [Problem Statement](#problem-statement)
+2. [Basic Solution [1074 bytes]](#basic-solution-1074-bytes)
+3. [Mapping grades to points [696 bytes]](#mapping-grades-to-points-696-bytes)
+4. [Mathematic manipulation [675 bytes]](#mathematic-manipulation-675-bytes)
+5. [Trivial reductions [421 bytes]](#trivial-reductions-421-bytes)
+6. [Return logic [302 bytes]](#return-logic-302-bytes)
+7. [Variables and assignment expressions [274 bytes]](#variables-and-assignment-expressions-274-bytes)
+8. [More math and imports [262 bytes]](#more-math-and-imports-262-bytes)
+9. [Lambda functions [253 bytes]](#lambda-functions-253-bytes)
+10. [.get() [252 bytes]](#get-252-bytes)
+11. [Math [249 bytes]](#math-249-bytes)
+12. [Further investigation](#further-investigation)
+13. [UDPATE [233 bytes]](#update-233-bytes)
+14. [UPDATE 2 [215 bytes]](#update-2-215-bytes)
+15. [Conclusion](#final-thoughts)
+
+## Problem statement
+
+Here is the first challenge:
+
+Given the grades for homework, labs, quiz 1, quiz 2, recitation activities, and checkpoints, as well as the number of attended recitations, our program must
+find the grade required on quiz 3 to achieve a certain target grade (A, A-, B+, etc). 
+
+| Letter Grade | Points   |
+| ------------ | -------- |
+| A            | 93-100   |
+| A-           | 90-92.99 |
+| B+           | 87-89.99 |
+| B            | 83-86.99 |
+| B-           | 80-82.99 |
+| C+           | 77-79.99 |
+| C            | 70-76.99 |
+| D            | 60-69.99 |
+| F            | 0-59.99  |
+
+| Group                 | Weight |
+| --------------------- | ------ |
+| Homework              | 30%    |
+| Labs                  | 20%    |
+| Module Checkpoints    | 5%     |
+| Recitation Activities | 6%     |
+| Recitation Attendance | 2%     |
+| Quiz 1                | 14%    |
+| Quiz 2                | 14%    |
+| Quiz 3                | 9%     |
+
+Additionally, recitation attendance is a grade equal to the number of recitations attended divided by 9. The grade can reach a maximum of 100%, meaning that any recitations attended after 9 has no impact on the grade.
+
+## Basic Solution [1074 bytes]
+
+This problem can be solved by calculating the grade of the assignments given, subtracting it from the target grade, and dividing the result by the weight of quiz 3.
+
+Here is an example calculation where the target grade is a B- (80%) and we have a HW score of 77, lab score of 91, quiz1 score of 64, quiz2 score of 88, activities score of 96, checkpoints score of 100, and attended 7 recitations.
+
+```
+hw * 0.30 + lab * 0.20 + quiz1 * 0.14 + quiz2 * 0.14 + activities * 0.06 + checkpoints * 0.05 + max(9, numAttended) / 9 * 100 * 0.02 = 74.8955555556
+
+80 - 74.8955555556 = quiz3 * 0.09
+quiz3 = 56.7160493827
+```
+
+Here are the specific strings we can return:
+
+| Grade needed | Output |
+| ------------ | ------ |
+| <0%   | `"You need a 0 to get a [targetGrade] in the class"` |
+| <100% | `"You need a [%] to get a [targetGrade] in the class"` |
+| >100% | `"You cannot get a [target grade] in the class"` |
+
+And here is a readable, non-golf solution to the problem in Python:
+
+```python
+import math
+
+def gradeCalculator(hw, lab, quiz1, quiz2, activities, checkpoints, numAttended, targetGrade):
+    points = hw * 0.30 + lab * 0.20 + quiz1 * 0.14 + quiz2 * 0.14 + activities * 0.06 + checkpoints * 0.05 + (min(9, numAttended) / 9) * 100 * 0.02
+
+    targetPoints = 0    
+    
+    if targetGrade == 'A':
+        targetPoints = 93
+    if targetGrade == 'A-':
+        targetPoints = 90
+    if targetGrade == 'B+':
+        targetPoints = 87
+    if targetGrade == 'B':
+        targetPoints = 83
+    if targetGrade == 'B-':
+        targetPoints = 80
+    if targetGrade == 'C+':
+        targetPoints = 77
+    if targetGrade == 'C':
+        targetPoints = 70
+    if targetGrade == 'D':
+        targetPoints = 60
+    if targetGrade == 'F':
+        targetPoints = 0
+
+    quiz3 = (targetPoints - points) / 0.09
+
+    if quiz3 > 100:
+        return f"You cannot get a {targetGrade} in the class"
+    elif quiz3 < 0:
+        return f"You need a 0 to get a {targetGrade} in the class"
+    else:
+        return f"You need a {math.ceil(quiz3)} to get a {targetGrade} in the class"
+```
+
+## Mapping grades to points [696 bytes]
+
+It's tempting to start a code golf attempt by shortening variable names and removing whitespace, but my strategy prioritizes changing the logic of the program before diving into shortcuts.
+
+One of the more obvious changes to make in this program is to reduce the conditionals that map a grade string ('A', 'A-', etc) to a number. This can be done using python's `dict` data structure, which is used as follows:
+
+```python
+import math
+
+def gradeCalculator(hw, lab, quiz1, quiz2, activities, checkpoints, numAttended, targetGrade):
+    points = hw * 0.30 + lab * 0.20 + quiz1 * 0.14 + quiz2 * 0.14 + activities * 0.06 + checkpoints * 0.05 + (min(9, numAttended) / 9) * 100 * 0.02
+  
+    gradeMap = {'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}
+    targetPoints = gradeMap[targetGrade]
+
+    quiz3 = (targetPoints - points) / 0.09
+
+    if quiz3 > 100:
+        return f"You cannot get a {targetGrade} in the class"
+    elif quiz3 < 0:
+        return f"You need a 0 to get a {targetGrade} in the class"
+    else:
+        return f"You need a {math.ceil(quiz3)} to get a {targetGrade} in the class"
+```
+
+## Mathematic manipulation [675 bytes]
+
+A few of the math operations in our program add characters and can be factored. Most notably, the `points` calculation adds an extra `.` character, so we can multiply all the coefficients by 100 and divide the final result by 100.
+
+A trivial way to shorten values with decimal points is to remove the leading `0` and trailing `0`s. Additionally, we remove the redundant parentheses around the recitation attendance calculation.
+
+Finally, quiz1 and quiz2 are added before being multiplied by 14, as they have a common coefficient, saving 3 bytes.
+
+```python
+import math
+
+def gradeCalculator(hw, lab, quiz1, quiz2, activities, checkpoints, numAttended, targetGrade):
+    points = (hw * 30 + lab * 20 + (quiz1 + quiz2) * 14 + activities * 6 + checkpoints * 5 + min(9, numAttended) / 9 * 200)/100
+
+    gradeMap = {'A':93, 'A-':90, 'B+':87, 'B':83, 'B-':80, 'C+':77, 'C':70, 'D':60, 'F':0}
+    targetPoints = gradeMap[targetGrade]
+
+    quiz3 = (targetPoints - points) / .09
+
+    if quiz3 > 100:
+        return f"You cannot get a {targetGrade} in the class"
+    elif quiz3 < 0:
+        return f"You need a 0 to get a {targetGrade} in the class"
+    else:
+        return f"You need a {math.ceil(quiz3)} to get a {targetGrade} in the class"
+```
+
+## Trivial reductions [421 bytes]
+
+At this point it would be useful to remove whitespace and shorten variable names. At some point, this actually can make reducing the code more obvious. Of course, variable names can be one letter, so we assign variable names alphabetically.
+
+```python
+import math
+def gradeCalculator(a,b,c,d,e,f,g,h):
+    i=(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100
+    j={'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}
+    k=j[h]
+    l=(k-i)/.09
+    if l>100:
+        return f"You cannot get a {h} in the class"
+    elif l<0:
+        return f"You need a 0 to get a {h} in the class"
+    else:
+        return f"You need a {math.ceil(l)} to get a {h} in the class"
+```
+
+## Return logic [302 bytes]
+
+There are similarities among the strings to be returned, and the logic can be shortened using some Python syntax trickery. First, we address the extra return statement for values less than 0:
+
+```python
+    elif l<0:
+        return f"You need a 0 to get a {h} in the class"
+    else:
+        return f"You need a {math.ceil(l)} to get a {h} in the class"
+# 150 bytes
+    else:
+        return f"You need a {max(0,math.ceil(l))} to get a {h} in the class"
+# 86 bytes
+```
+
+The strings to be returned have an identical start and ending: `You ... get a {h} in the class` We will replace the differing parts using a common shortcut in code golf Python: 
+
+```python
+if a:
+    return x
+else:
+    return y
+
+# is the same as...
+
+return (y,x)[a]
+```
+
+This works by creating a tuple with the two potential return values, and accessing the tuple (either index 0 or 1) through a conditional statement. The conditional evaluates to 0 or 1, which becomes the index accessed. Here is the full code after making these changes:
+
+```python
+import math
+def gradeCalculator(a,b,c,d,e,f,g,h):
+    i=(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100
+    j={'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}
+    k=j[h]
+    l=(k-i)/.09
+    return "You "+(f"need a {max(0,math.ceil(l))} to","cannot")[l>100]+f" get a {h} in the class"
+```
+
+## Variables and assignment expressions [274 bytes]
+
+The program, as it is now, assigns variables that are used once and never used again. This wastes a newline character, an assignment operator (`=`), and two instances of the variable name, but more importantly, does not allow us to declare the function as a `lambda` function (covered later).
+
+One variable that *is* used twice is the final result, `l`, as it is part of the conditional and final result to print. We can declare the variable, which means we will always have an additional line preventing us from using `lambda`, or we can write the full expression for `l` twice, which will significantly increase the byte count.
+
+The third option is the "walrus operator" (`:=`), which enables an inline assignment of a variable to an expression while returning an expression. Example:
+
+```python
+# No :=
+x=1
+f(x)
+g(x)
+
+# With :=
+f(x:=1)
+g(x)
+```
+
+Even though we are using the `(a,b)[c]` syntax to shorthand our condition statment, the `:=` operator works because both `a` and `b` are evaluated before the tuple is accessed.
+
+Combining all of these techniques, we achieve both significant code reduction and are able to write the `gradeCalculator` function on one line:
+
+```python
+import math
+def gradeCalculator(a,b,c,d,e,f,g,h):
+    return"You "+(f"need a {max(0,math.ceil(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}[h]-(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100)/.09))} to","cannot")[l>100] + f" get a {h} in the class"
+```
+
+## More math and imports [262 bytes]
+
+Using `import` in a Python code golf as we are now for a single function can often lengthen code. Thankfully, we can substitute `math.ceil()` with the `.__ceil__()` method:
+
+```python
+# Import (24 bytes)
+import math
+math.ceil(l)
+
+# No import (12 bytes)
+l.__ceil__()
+```
+
+More potential mathematical reductions become evident when we write our code without whitespace:
+
+```python
+...+min(9,g)/9*200)/100)...
+```
+
+Here, it way be beneficial to factor the 200 out to divide it by 100. This requires rearranging the expression's parentheses and moving the division.
+
+```python
+((a*30+b*20+(c+d)*14+e*6+f*5)/100+min(9,g)/9*2)
+(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100
+```
+
+Surprisingly, there's no change in the byte length! Many potential optimizations that look promising will end up with a +/-1 byte difference, or no difference at all. I will go over some of the thoughts I had for reductions later, as they may be useful for other code golf problems.
+
+Here is the final code for this stage:
+```python
+def gradeCalculator(a,b,c,d,e,f,g,h):
+    return"You "+(f"need a {max(0,(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}[h]-(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100)/.09).__ceil__())} to","cannot")[l>100]+f" get a {h} in the class"
+```
+
+## Lambda functions [253 bytes]
+
+Getting all of our function code onto one line allows for the final optimization: declaring a lambda function. Outside of code golf, `lambda` is useful for declaring anonymous functions that can be used for function callbacks.
+
+In code golf, its a great way to lose a couple of bytes. By assigning the `lambda` function created to the function name, we can call the `lambda` function as a regular function. Here is how it works:
+
+```python
+def f(x):
+    return x + 1
+
+f = lambda x : x + 1
+```
+
+```python
+gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a {max(0,(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}[h]-(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100)/.09).__ceil__())} to","cannot")[l>100]+f" get a {h} in the class"
+```
+
+## .get() [252 bytes]
+
+One important observation in the grade `dict` is that the final entry has a value of 0 (`'F':0`). If we choose the omit this value and access the dict through the shortest indexing syntax (`[x]`), an error would occur. However, by using `.get()` we are able to potentially shorten the code:
+
+```python
+{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}[h]
+
+{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60}.get(h,0)
+```
+
+If you haven't noticed, it turns out that the lengths are the same. And if you were to take a value that was a digit longer, you would need to add back that digit in the `get()` function. However, not all of our keys are one char long...
+
+```python
+# 70 bytes
+{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}[h]
+
+# 69 bytes
+{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)
+```
+
+Picking any of the grades with +/- can using that as a default value allows us to remove it from the dict, shortening the code by one byte!
+
+```python
+gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a {max(0,(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)-(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100)/.09).__ceil__())} to","cannot")[l>100]+f" get a {h} in the class"
+```
+
+## Math [249 bytes]
+
+Here is the math portion of the program:
+
+```python
+max(0,(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)-(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100)/.09).__ceil__())
+```
+
+Pretty hard to read, right? Maybe expanding it would help with finding potential improvements:
+
+```python
+max(0,
+(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)
+-
+(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)
+/100)/.09).__ceil__()
+)
+```
+
+One bother is the division by 100 after the final term being multiplied by 200.
+
+```python
+max(0,
+(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)
+-
+(a*30+b*20+(c+d)*14+e*6+f*5)/100-(min(9,g)/9*2))
+/.09).__ceil__()
+)
+```
+
+This is unfortunately the same length as the previous code. But it also reveals a rearrangement that reduces the parentheses needed:
+
+```python
+max(0,
+(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)
+-
+(a*30+b*20+(c+d)*14+e*6+f*5)/100-min(2,g/9*2))
+/.09).__ceil__()
+)
+```
+
+The `.__ceil__()` function also looks a bit long, and we can use some math to avoid it:
+
+```python
+max(0,
+l:=-int(-(({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)
+-
+(a*30+b*20+(c+d)*14+e*6+f*5)/100-min(2,g/9*2))
+/.09)//1))
+```
+
+The trick here is to calculate the ceiling using `-(-n//1)`, which effectively floors the negative of `n`, which becomes the positive ceiling once it is negated again. We also need to include an `int` cast because one of the operands in the true division is a float value.
+
+All of these changes yield the following program:
+
+```python
+gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a {max(0,l:=-int(-(({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)-(a*30+b*20+(c+d)*14+e*6+f*5)/100-min(2,g/9*2))/.09)//1))} to","cannot")[l>100]+f" get a {h} in the class"
+```
+
+~~As far as I know, this is the shortest program that meets the input/output parameters, but please let me know if you find a shorter one.~~
+
+View my ~~[update](#update-231-bytes)~~ and [second update](#update-2-214-bytes) below for a much, much shorter program.
+
+## Further investigation
+
+I wouldn't be comfortable saying my submission was my best effort without exploring the many avenues for improvement. I'd also like to note that generating ideas for potential code reductions and writing them down is an important concept; many of the ideas I will write about here could be applied to future challenges with minor differences in the parameters.
+
+# Procedural generation
+
+One of the longest pieces of code in the program is the map of letter grades to numbers:
+
+`{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}`
+
+There are several ideas to shorten this code and others that may have worked at larger input sizes, but don't yield results in this problem.
+
+### Zipping two lists
+
+Python allows you to "zip" two lists into one `dict` using the `zip` function. Eg:
+
+```python
+# dict literal (67 bytes)
+{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}
+
+# zipped dict from list literals (80 bytes)
+dict(zip(['A','A-','B+','B','B-','C+','C','D','F'],[93,90,87,83,80,77,70,60,0]))
+```
+
+In our case, this adds 13 bytes to the implementation, but can be combined with string slicing to create a much shorter implementation.
+
+```python
+# generated dict approach (71 bytes)
+dict(zip([*'ABCDF'],[93,83,70,60,0]))|{'A-':90,'B+':87,'B-':80,'C+':77}
+```
+
+Unfortunately, the possible letter grades range from 1 to 2 because of the +/-'s added, but we are still able to add a shortened dict. And to verify that the lengths are a problem, we access the dicts as we would in the program:
+
+```python
+# dict literal (69 bytes)
+{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)
+
+# generated dict approach (73 bytes)
+dict(zip([*'ABCDF'],[93,83,70,60,0]))|{'A-':90,'B+':87,'B-':80}.get(h,77)
+
+# generated dict approach w/ whole string (74 bytes)
+dict(zip("A A- B+ B B- C D F".split(),[93,90,87,83,80,70,60,0])).get(h,77)
+
+# combined approach (75 bytes)
+dict(zip([*'ABCDF']+'A- B+ B-'.split(),[93,83,70,60,0,90,87,80])).get(h,77)
+
+# combined approach, indexing with [] (74 bytes)
+dict(zip([*'ABCDF']+'A- B+ B- C+'.split(),[93,83,70,60,0,90,87,80,77]))[h]
+```
+
+Another disappointing deadend is reached, but this approach could very well save space if the parameters of the problem were different.
+
+Some other thoughts this line of thinking prompted:
+- Factoring 10 out of the grades and multiplying all values by 10 at the end (too much code)
+- Iterating through dict to assign values (adjacent grade values differ by 3-10 points, not constant)
+- Seperating string of all grades (shown above, too long)
+- Combination of string to list conversion and split with space
+
+**EDIT**: In [update 1](#dict-alternative) and [update 2](#update-2-214-bytes) I write about some `dict` alternatives that *do* work. I think the lesson to take from those is to follow my hunch about some piece of code being too long. ;)
+
+# Dot product
+
+Perhaps you noticed the following pattern within the math part of our code:
+
+```python
+# 26 bytes
+a*30+b*20+(c+d)*14+e*6+f*5 # ...+x*y+...
+```
+
+If you are familiar with linear algebra, you may immediately recognize this as a dot product between the vectors `[a,b,c,d,e,f]` and `[30,20,14,6,5]`. This observation may be useful if Python had a shorthand to multiply vectors, but unfortunately the shortest code to perform this operation is pretty long:
+
+```python
+# 56 bytes
+sum(map(lambda x,y:x*y,[a,b,c,d,e,f],[30,20,14,14,6,5]))
+```
+
+Why even explore this observation? The main reason behind doing so is the first vector: `[a,b,c,d,e,f]`. There is a way to get this list from the arguments without using all the variable names if we declare the lambda function differently:
+
+```python
+# Current declaration (39 bytes)
+gradeCalculator=lambda a,b,c,d,e,f,g,h: # rest of function...
+
+# Shortened declaration (25 bytes)
+gradeCalculator=lambda*a: # rest of function...
+```
+
+The syntax above lets the lambda function work identically to its previous version, with the arguments being passed as a tuple. Doing this yields a significant saving of 13 bytes upfront, but it means we need to index every argument where it is used. Thankfully, the arguments of the function are primarily used in the dot product, so lets compare the new version to the old version:
+
+```python
+# Old function (253 bytes)
+gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a {max(0,(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}[h]-(a*30+b*20+(c+d)*14+e*6+f*5+min(9,g)/9*200)/100)/.09).__ceil__())} to","cannot")[l>100]+f" get a {h} in the class"
+
+# New function (266 bytes)
+gradeCalculator=lambda*a:"You "+(f"need a {max(0,(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}[a[7]]-(sum(map(lambda x,y:x*y,a,[30,20,14,14,6,5]))+min(9,a[6])/9*200)/100)/.09).__ceil__())} to","cannot")[l>100]+f" get a {a[7]} in the class"
+```
+
+Unfortunately, this approach is 14 bytes off of an improvement, which is impossible to improve upon. You may try alternative methods of performing the dot product on your own, but all attempts for me yielded no results. As an example, here is an attempt at reducing the code with `numpy`:
+
+```python
+# Numpy function (270 bytes)
+import numpy as n
+gradeCalculator=lambda*a:"You "+(f"need a {max(0,(l:=({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C+':77,'C':70,'D':60,'F':0}[a[7]]-(n.dot(a[:6],[30,20,14,14,6,5])+min(9,a[6])/9*200)/100)/.09).__ceil__())} to","cannot")[l>100]+f" get a {a[7]} in the class"
+```
+
+I was very disappointed to learn that this alternative approach to the math in the problem yielded no results, but these ideas are easily applicable to similar problems with larger inputs for multiplication, as the advantage may outweigh the additional syntax.
+
+As a sidenote, this approach may have been feasable if the inputs of the function were in a different order. If the target grade and numAttended values were the first parameters, a declaration like this would have worked:
+
+```python
+gradeCalculator=lambda a,b,*c: # function here...
+```
+
+This would have eliminated the need for accessing the tuple parameter with `[]` and would have saved 13 bytes at the cost of 5 extra at the start of the function.
+
+## UPDATE [233 bytes]
+
+I initially wrote this blog 2 days before this part and told myself I was done once I wrote about exhausting all possible reductions.
+
+The code golf contest was still ongoing at the time of writing this, and after submitting my 249 byte solution, I quickly realized my code was surpassed by a program 1 byte shorter and another 14 bytes shorter (235 bytes!). Here is my response to those, after I lay some refreshed eyes on the problem:
+
+<div style="background:#ffa38a; line-height:16.9px; font-size: 13px;word-break: break-all;text-align: left; color:#2C363C; font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace; padding: 8px 12px; position: relative; white-space: pre-wrap; overflow-wrap: break-word; padding-right: 20px; display: table-cell;"><span>gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a </span><span style="background:#ff5631;margin: 0;padding: 0;border: 0;">{max(0,l:=-int(-(({'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)-(a*30+b*20+(c+d)*14+e*6+f*5)/100-min(2,g/9*2))/.09)//1))}</span><span> to","cannot")[l&gt;100]+f" get a {h} in the class"</span></div>
+<br>
+<div style="background:#80dca9; line-height:16.9px; font-size: 13px;word-break: break-all;text-align: left; color:#2C363C; font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace; padding: 8px 12px; position: relative; white-space: pre-wrap; overflow-wrap: break-word; padding-right: 20px; display: table-cell;"><span>gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a </span><span style="background:#2ea769;margin: 0;padding: 0;border: 0;">{max(0,l:=-int(-((b'^TG=[XQN'[([*'ABCDF']+['A-','B+','B-','C+']).index(h)]-1-min(2,g/9*2))*100-a*30-b*20-(c+d)*14-e*6-f*5)//9))}</span><span> to","cannot")[l&gt;100]+f" get a {h} in the class"</span></div>
+<br>
+
+# Dict alternative
+
+I wrote about `dict`s and ways to shorten making one earlier, including zipping two lists together to get a dict, potentially cutting down on bytes used.
+
+Here are what that idea looked like:
+
+```python
+# dict literal (69 bytes)
+{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)
+
+# combined approach, indexing with [] (74 bytes)
+dict(zip([*'ABCDF']+'A- B+ B- C+'.split(),[93,83,70,60,0,90,87,80,77]))[h]
+```
+
+Thinking about the use of two lists, I realized a `dict` isn't needed at all; if the order of the key value pairs is preserved in the two lists, we can find the index of the target grade in some list to get the index needed in another list of corresponding numbers.
+
+```python
+# dict literal (69 bytes)
+{'A':93,'A-':90,'B+':87,'B':83,'B-':80,'C':70,'D':60,'F':0}.get(h,77)
+
+# indexing and accessing list (72 bytes)
+[93,83,70,60,0,90,87,80,77][([*'ABCDF']+['A-','B+','B-','C+']).index(h)]
+```
+
+This version may be too long, but thankfully lists of `int`s can be shortened with the use of byte strings.
+
+```python
+# indexing and accessing list (72 bytes)
+[93,83,70,60,0,90,87,80,77][([*'ABCDF']+['A-','B+','B-','C+']).index(h)]
+
+# indexing and accessing list w/ byte string (59 bytes)
+b'^TG=[XQN'[([*'ABCDF']+['A-','B+','B-','C+']).index(h)]-1
+```
+
+The `int`s in the list are replaced by their corresponding ASCII representation, eliminating the need for tradition list syntax. This approach saves *10 bytes*, getting us much closer to a more optimal solution. The grade `'F'` corresponds to a value of `0`, but we can't use a NUL character in the middle of the byte string. Instead, I increased all the other byte string characters by 1 and appended `-1` to the end of the expression.
+
+# More math
+
+I avoided focusing on the second half of the `l` variable expression, believing it to be as short as possible. This was not the case:
+
+```python
+# original calculation (57 bytes)
+-(a*30+b*20+(c+d)*14+e*6+f*5)/100-min(2,g/9*2))/.09)//1))
+
+# new calculation (51 bytes)
+-min(2,g/9*2))*100-a*30-b*20-(c+d)*14-e*6-f*5)//9))
+```
+
+What struck me as a good target for golfing was `/.09`. It's important to not that replacing it with `/9*100` or `*100/9` would calculate the same result, and the dot product calculation is some expression divided by 100. Additionally, there is the possiblity of using `//9` instead of `/9//1`, saving more bytes. First, the `min` term needs to be moved towards the beginning of the expression:
+
+```python
+-(a*30+b*20+(c+d)*14+e*6+f*5)/100-min(2,g/9*2))/.09)//1)) # original
+-min(2,g/9*2)-(a*30+b*20+(c+d)*14+e*6+f*5)/100)*100/9)//1) # +1 byte
+```
+
+After this, the `*100` is distributed (the `min` term isn't divided by 100, so there is no `/100` to cancel out):
+
+```python
+-(a*30+b*20+(c+d)*14+e*6+f*5)/100-min(2,g/9*2))/.09)//1)) # original
+-min(2,g/9*2)-(a*30+b*20+(c+d)*14+e*6+f*5)/100)*100/9)//1) # +1 byte
+-min(2,g/9*2))*100-(a*30+b*20+(c+d)*14+e*6+f*5)/9)//1) # -3 bytes
+```
+
+Re-arranging the end, we can save on bytes by making a single `//` operation (remember, a true division is necessary to ceil the result). Additionally, we can now distribute the negative sign across the dot product, reducing parentheses needed:
+
+```python
+-(a*30+b*20+(c+d)*14+e*6+f*5)/100-min(2,g/9*2))/.09)//1)) # original
+-min(2,g/9*2)-(a*30+b*20+(c+d)*14+e*6+f*5)/100)*100/9)//1) # +1 byte
+-min(2,g/9*2))*100-(a*30+b*20+(c+d)*14+e*6+f*5)/9)//1) # -3 bytes
+-min(2,g/9*2))*100-(a*30+b*20+(c+d)*14+e*6+f*5)//9)) # -5 bytes
+-min(2,g/9*2))*100-a*30-b*20-(c+d)*14-e*6-f*5)//9)) # -6 bytes
+```
+
+Our new calculation saves another *6 bytes*, an *16 byte* save in total.
+
+## UPDATE 2 [215 bytes]
+
+I'm writing this the same day as I write update 1, which is making me think this isn't the end of the road...
+
+On the other hand, I've made an optimization here that is hard to beat. Here is the new program:
+
+<div style="background:#ffa38a; line-height:16.9px; font-size: 13px;word-break: break-all;text-align: left; color:#2C363C; font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace; padding: 8px 12px; position: relative; white-space: pre-wrap; overflow-wrap: break-word; padding-right: 20px; display: table-cell;"><span>gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a {max(0,l:=</span><span style="background:#ff5631;margin: 0;padding: 0;border: 0;">-int(-((b']SF<ZWPM'[([*'ABCDF']+['A-','B+','B-','C+']).index(h)]</span><span>-min(2,g/9*2))*100-a*30-b*20-(c+d)*14-e*6-f*5)//9))} to","cannot")[l>100]+f" get a {h} in the class"</span></div>
+<br>
+<div style="background:#80dca9; line-height:16.9px; font-size: 13px;word-break: break-all;text-align: left; color:#2C363C; font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace; padding: 8px 12px; position: relative; white-space: pre-wrap; overflow-wrap: break-word; padding-right: 20px; display: table-cell;"><span>gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a {max(0,l:=</span><span style="background:#2ea769;margin: 0;padding: 0;border: 0;">-int(((min(2,g/9*2)-b'^TG=[ X Q N'['ABCDFA-B+B-C+'.find(h)]+1)*100+a*30+b*20+(c+d)*14+e*6+f*5)//9))</span><span>-min(2,g/9*2))*100-a*30-b*20-(c+d)*14-e*6-f*5)//9))} to","cannot")[l>100]+f" get a {h} in the class"</span></div>
+<br>
+
+My first thoughts when coming back to the old code was that generating the list of grades could easily be reduced in size, and indeed, it could:
+
+```python
+([*'ABCDF']+['A-','B+','B-','C+']).index(h)
+'A B C D F A- B+ B- C+'.split().index(h) # -3 bytes
+```
+
+At this point I realized that `.split()` and `.index(h)` could be eliminated and replaced by `.find()`. At first, it seems like `.find()` would not work, especially given the fact that some of our potential grades are different lengths from others (eg. `'A'` and `'A-'`). Dividing the returned index from `.find()` by 2 seems like a good start to work around this, and leads to the following values:
+
+```python
+>>> for c in 'A B C D F A- B+ B- C+'.split(): print('A B C D F A- B+ B- C+'.find(c)//2)
+...
+0
+1
+2
+3
+4
+5
+6
+8
+9
+```
+
+The values are consecutive integers, skipping `7`. But this is no problem, especially now that we are indexing from a byte string. Our new byte string should move the values at index 7 and 8 to 8 and 9, leaving any character in the 7th position (which won't be accessed).
+
+```python
+([*'ABCDF']+['A-','B+','B-','C+']).index(h)
+'A B C D F A- B+ B- C+'.split().index(h) # -3 bytes
+'A B C D F A- B+ B- C+'.find(h)//2 # -9 bytes
+```
+
+At this point it took me another while to realize that the spaces in the string aren't necessary to find the grade's index. This also allows for the elimination of `//2` but requires a longer byte string.
+
+```python
+'A B C D F A- B+ B- C+'.find(h)//2 # -9 bytes
+'ABCDFA-B+B-C+'.find(h) # -20 bytes
+
+b'^TG=[XQN' # old byte string
+b'^TG=[ X Q N' # +3 bytes, a small price to pay
+```
+
+Combining these strategies, we lose another *17 bytes* in program length. It's also important to note that this optimization is only possible due to the current ordering of the key-value pairs. If `'B+'` were to come before `'B'`, `.find('B')` would return the index for `'B+'`, which is not the value we want to use.
+
+Finally, we want to distribute the negative sign that is used to ceil the math result. Here is what that looks like:
+
+```python
+-((b'^TG=[ X Q N'['ABCDFA-B+B-C+'.find(h)]-min(2,g/9*2))*100-a*30-b*20-(c+d)*14-e*6-f*5)
+((min(2,g/9*2)-b'^TG=[ X Q N'['ABCDFA-B+B-C+'.find(h)])*100+a*30+b*20+(c+d)*14+e*6+f*5) # negative distributed, -1 byte!
+```
+
+## Final thoughts
+
+I definitely enjoyed working on this code golf problem, and am looking forward to writing editorials for future challenges. Code golf is also a great way to learn the syntax of your language of choice and it introduces concepts that are unknown to 90% of programmers. It may help with writing code in programming competitions faster, but I think that the primary advantage of doing code golf is the exercise in thought it provides.
+
+I should also think about golfing my code golf blog posts, this one is pretty long... My next blog post will be on SimX once again, I will be sharing work on the complete particle simulation.
