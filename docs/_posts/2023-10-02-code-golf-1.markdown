@@ -25,6 +25,7 @@ As I write this post and its updates the code golf contest is ongoing, so this i
 13. [UDPATE [233 bytes]](#update-233-bytes)
 14. [UPDATE 2 [215 bytes]](#update-2-215-bytes)
 15. [Conclusion](#final-thoughts)
+16. [Post-contest update [206 bytes]](#post-contest-update-206-bytes)
 
 ## Problem statement
 
@@ -664,3 +665,26 @@ Finally, we want to distribute the negative sign that is used to ceil the math r
 I definitely enjoyed working on this code golf problem, and am looking forward to writing editorials for future challenges. Code golf is also a great way to learn the syntax of your language of choice and it introduces concepts that are unknown to 90% of programmers. It may help with writing code in programming competitions faster, but I think that the primary advantage of doing code golf is the exercise in thought it provides.
 
 I should also think about golfing my code golf blog posts, this one is pretty long... My next blog post will be on SimX once again, I will be sharing work on the complete particle simulation.
+
+## Post-contest update [206 bytes]
+
+Although the 215-byte solution came in first in the code golf contest, combining the solution with other solutions resulting in significant savings:
+
+```python
+# 215 byte solution
+gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a {max(0,l:=-int(((min(2,g/9*2)-b'^TG=[!X Q N'['ABCDFA-B+B-C+'.find(h)]+1)*100+a*30+b*20+(c+d)*14+e*6+f*5)//9))} to","cannot")[l>100]+f" get a {h} in the class"
+
+# 206 byte solution
+gradeCalculator=lambda a,b,c,d,e,f,g,h:f"You {['need a %d to'%max(0,l:=-((((min(2,g/9*2)-b'^TG=[!X QN'['ABCDFA-B+B-'.find(h)]+1)*20+a*6+b*4+e+f)*5+e+(c+d)*14)//9)),'cannot'][l>100]} get a {h} in the class"
+```
+
+First, one of the grades from the string of possible target grades can be removed (in this case, `'C+'`). This works because `.find()` returns `-1` when a corresponding index is not found, rather than throwing an exception. `-1` accesses the last character in the byte string, which in this case was the corresponding ASCII representation of the grade for `C+`. Because we are accessing the last value rather than some index when finding the corresponding number for `'C+'`, we can remove the spacing between Q and N. This saves 3 bytes.
+
+```python
+b'^TG=[!X Q N'['ABCDFA-B+B-C+'.find(h)]+1
+b'^TG=[!X QN'['ABCDFA-B+B-'.find(h)]+1
+```
+
+Second, we can format the strings using a combination of f-strings and % formatting to cut down on syntax. This alone saves 2 bytes, but it's important to note that the `%d` formatting means that the value used is automatically cast to an `int`, thereby reducing the code by another 3 bytes by eliminating the need for the explicit cast. NB: Where the `int` cast would normally actually matter, because the `int` after the walrus operator makes `l` an `int`, while the `%d` only casts the literal value given to an int, meaning the `l` variable does not become an `int` value. In our case, the program behaves identically because the type of `l` does not matter outside of the string.  
+
+Finally, we factor out a `5` in the math section of the code to reduce it by 1 byte, changing constants such as `100`,`30`, and `20` to `20`, `6`, and `4`.
