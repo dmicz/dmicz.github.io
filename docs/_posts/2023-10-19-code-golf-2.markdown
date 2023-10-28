@@ -1,0 +1,147 @@
+---
+layout: post
+title:  "Code Golf: Challenge 2"
+date:   2023-10-19
+category: code-golf
+---
+
+Welcome to a second breakdown of my code golf submission. I'll be going over some of the tricks of the final solution, rather than the process to getting there.
+
+## Problem Statement
+
+Our function, **successors**, must return a dictionary whose keys are the included words from a string, and values that are lists of the *unique* successors to the words.
+
+To clarify, *words* are consecutive alphabetic characters, as well as single characters of punctuation/numbers (non-alphabetic non-whitespace). No word should have an empty list (ie. last word is not included in the dict). Additionally, regular expressions are not permitted and a period character must come before the first word and after the last word.
+
+Here is a clarifying example:
+```python
+text = "one,two-three;Four+five*six seven(eight)\n  \t 9 ten 1one,one2 13"
+expected_dict = {
+    '.': ['one'], 'one': [',', '2'], ',': ['two', 'one'], 'two': ['-'], '-': ['three'], 'three': [';'], ';': ['Four'],
+    'Four': ['+'], '+': ['five'], 'five': ['*'], '*': ['six'], 'six': ['seven'], 'seven': ['('], '(': ['eight'],
+    'eight': [')'], ')': ['9'], '9': ['ten'], 'ten': ['1'], '1': ['one', '3'], '2': ['1'], '3': ['.']
+}
+assert successors(text) == expected_dict
+```
+
+## Solution (143 bytes)
+
+```python
+def successors(s,x='.'):
+    b={}
+    for i in''.join([(f' {k} ',k)[k.isalpha()]for k in s+x]).split():a=b.get(x,[]);b[x]=a+[*{i}-{*a}];x=i
+    return b
+```
+
+Going line by line, we start at the function's parameters. The only specified parameter is `s`, the string to be processed. However, we can use default arguments to save on variable assignment[^1].
+
+Why could `b` not be assigned to an empty `dict` as a default argument? The issue of doing that is related to mutability of `dict`s. Because the object is mutable, any changes made to `b` will be reflected in subsequent function calls. This means that the function can be called once before `b` needs to be reset, bringing us back to a higher number of bytes used. Instead, we declare `b` on its own line.
+
+Next, we modify and return the dictionary `b` using a processed and split version of the string `s`. A full breakdown of this and other approaches follows.
+
+### Problem approach analysis
+
+The general approach I found to be the most byte-efficient is to split the string passed to the function, then process it by iteration.
+
+Another approach:
+
+```python
+def successors(s):
+    s=['.']+''.join([(' %s '%k,k)[k.isalpha()]for k in s]).split()+['.']
+    return{i:[k for j,k in zip(s,s[1:])if i==j]for i in s[:-1]}
+```
+
+The approach here is to construct the `dict` using list comprehension inside of dict comprehension. The reason I pursued this idea was to shorten the function down to a `lambda` function, but I didn't find it possible without spending significantly more bytes of creating `s`. Assignment expressions (`:=`) are forbidden inside either for loop of our double comprehension, and using the entire expression to construct a split string has a significant cost. Although this code is relatively short, I also realized that logic for duplicate values needed to be added (each key's value must contain a list of *unique* successor symbols/words). This additional logic would need to come in the form of a for loop after the `dict` declaration, but it would defeat the purpose of the dict/list comprehension (we no longer return a dict comprehension expression as it needs to be processed after it is created).
+
+Another approach is to iterate through an unprocessed string and create the dict on the fly while iterating through the string. Basic analysis shows its ineffectiveness:
+- For loop iterates through `s`
+    - Dict needs *update* code (discussed later)
+        - Logic to prevent duplicates
+    - Variables track current run of alphabetic characters to add whole word at a time
+        - Seperate conditionals for alphabetic, punctuation, and whitespace characters
+- Return dict
+
+For those interested, here is a semi-golfed example of this code:
+
+```python
+def successors(s):
+    b={};x='';p='.'
+    def z(x):b[p]=a=b.get(p,[]);b[p]=a+[*{i}-{*a}]
+    for i in s+p:
+        if i.isalpha():x+=i
+        else:
+            if x!='':z(x);p=x;x=''
+            if i.isspace():continue
+            else:z(i);p=i
+    return b
+```
+
+I don't see this shortening down to under 150 bytes, and decided not to pursue this approach.[^2]
+
+We continue with the following code:
+
+```python
+for i in''.join([(f' {k} ',k)[k.isalpha()]for k in s+x]).split():a=b.get(x,[]);b[x]=a+[*{i}-{*a}];x=i
+```
+
+Our first goal is to split the string into a list whose elements are each word and punctuation in `s`, in the order in which they appear. `.split()` is a good function for this, but neglects the punctuation characters that are directly after or before a word. The function simply only splits the string by spaces or a defined delimiter.
+
+Example:
+
+```python
+'a short string .'.split() # ['a','short','string','.']
+'a short string.'.split() # ['a','short','string.']
+```
+
+To circumvent this restriction, we surround each punctuation mark with spaces to split them from their adjacent words. String objects have a `.replace()` function, but this only replaces a string literal with another string literal. We need to use conditional statements to only surround the punctuation marks with spaces.
+
+Rather than dealing with string methods to solve this, we can use list comprehension to loop through each character in `s` and construct a list of strings. Here is what that looks like:
+
+```python
+[(f' {k} ',k)[k.isalpha()]for k in s+x]
+```
+
+We look through each character `k` in `s+x`, which is the string we are processing with the argument `x` appended. Because `x` is unused in calls, its value is `'.'` and we append it to meet our function's requirement of having `'.'` after the final word in the string. The program specification also requires the dictionary to have the first word be a successor to `'.'`, but this is achieved by setting `x` to the last word/symbol we iterated over, not the current word.
+
+Using a tuple with the values `f' {k} '` and `k` accessed by `k.isalpha()` allows us to replace `k` in the list with a spaced version of it if it is a symbol. The list returned from this list comprehension isn't too useful on its own, so we use `.join()` to turn it into a usable string:
+
+```python
+>>> [(f' {k} ',k)[k.isalpha()]for k in 'a short string.']
+['a', '   ', 's', 'h', 'o', 'r', 't', '   ', 's', 't', 'r', 'i', 'n', 'g', ' . ']
+>>> ''.join([(f' {k} ',k)[k.isalpha()]for k in 'a short string.'])
+'a   short   string . '
+>>> ''.join([(f' {k} ',k)[k.isalpha()]for k in 'a short string.']).split()
+['a', 'short', 'string', '.']
+```
+
+You may notice that the spaces are also padded by spaces, but we can do this without consequence. Now we can focus on creating the dict while iterating through each element in the split string:
+
+```python
+a=b.get(x,[]);b[x]=a+[*{i}-{*a}];x=i
+```
+
+We first need to declare `a` as either the current state of `b[x]`, where `x` is the last word/symbol we iterated on and `b` is the dict we are modifying, or as an empty list. We do this because we cannot simply append a list of `b[x]`, as this would result in an exception if `b[x]` hasn't been previously declared. Alternatives such as modifying the dict with the `|=` operator exist, but this approach is the most byte efficient. We can then set `b[x]` equal to `a`, which contains its previous state or an empty list, plus the new successor we found, `i`.
+
+The new successor cannot simply be added to the dictionary because we cannot add duplicate successors. There are a couple of approaches to solve this below:
+
+```python
+([i],[])[i in a]    # 16 bytes
+[i]*-~-(i in a)     # 15 bytes
+[*{i}-{*a}]         # 11 bytes
+```
+
+I recommend thinking through how each one works to understand some key python code golfing techniques. The first one should be familiar as it's simply a tuple accessed by a conditional, just like the one used to space out symbols in `s`. The second one is a bit more complex and involves turning the condition `i in a`, which returns a boolean value, to its numeric opposite. It is equivalent to multiplying `[i]` with `(not i in a)`, which also casts the boolean to an integer. By using negation and the complement operator, we can turn the `(i in a)` condition to `1` when it is false and `0` when it is true.
+
+Perhaps the most interesting shortcut (11 bytes) we could use here involves Python's "splatting" feature, or iterable unpacking. In order of operator precedence, we first construct a set using `i` and by "unpacking" `a`, a list, into another set using the `*` operator. By subtracting the set containing `i` from the set containing all of `a`, we remove `i` from the left set if it exists in the right set consisting of `a`. **NB:** This operation would not work the other way, which would return a set of all of `a` without `i`. The `*` operator to the left of the subtraction is then applied to the subtracted set, unpacking it into a list (denoted by the brackets outside the expression). The result is a list containing `i` if it doesn't exist in `a`.
+
+A question that may arise is why to not simply add `i` to a set containing `a` and set the predecessor's value to the result. Unfortunately a move like this does not work because sets in Python are sorted lexicographically, which means the order of `a` will not be preserved between the operations. We are required to return the list of successors in the order in which they appear, so the only "magic" we can use sets for is to create a list to append to the current list of successors.
+
+The final steps of this program are to set `x` to `i`, making sure that `x` contains the predecessor symbol for the next iteration. We return the dictonary `b` at the end of the program. 
+
+## Conclusion
+
+There are many interesting approaches to this problem, and many approach close to or surpass the byte count of my 143 byte solution. The approach I used in my solution should be fairly easy to replicate by a beginner trying this problem rather than the optimal solution of using a single loop and keeping track of variables, while also being somewhat more elegant in my opinion.
+
+[^1]: In actuality, `x` can be declared and assigned on the next line without wasting any characters by using `;` to seperate the two assignments. However, I kept `x` in the parameters because I was able to reduce whitespace by assigning `b` as well, until I found an issue (discussed below footnote).
+
+[^2]: I later learn that this approach of using a single loop and keeping track of current and previous variables actually is an optimal solution that beats 143 characters.
