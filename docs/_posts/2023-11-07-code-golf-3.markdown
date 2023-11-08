@@ -1,0 +1,78 @@
+---
+layout: post
+title:  "Code Golf: Challenge 3"
+date:   2023-11-07
+category: code-golf
+---
+
+Welcome to the third breakdown of my code golf submissions for my introductory CS class. The problem for this challenge had a leaderboard for both non-regex and [regex](https://en.wikipedia.org/wiki/Regular_expression) solutions, and I decided to use regex to increase my familarity with it.
+
+## Problem Statement
+
+We are defining a function, **acronymize**, that must return a modified version of the original string where any consecutive words with their first letter capitalized are combined into an acronym. Any punctuation breaks consecutiveness and the replacement string must be a string containing the first letter of each word in the acronym. Any of the following punctuation can seperate text: `,.;?!`.
+
+Example:
+```python
+>>> acronymize('United States Postal Service')
+'USPS'
+>>> acronymize('Students at Penn State University enjoy Computer Science.')
+'Students at PSU enjoy CS.'
+>>> acronymize('One language used for managing databases is Structured Query Language. The language was developed at International Business Machines.')
+'One language used for managing databases is SQL. The language was developed at IBM.'
+```
+
+## Solution (108 bytes)
+
+```python
+import re;acronymize=lambda s:re.sub(r'([A-Z]\w*\s)+[A-Z]\w*',lambda x:''.join(a[0]for a in x[0].split()),s)
+```
+
+The primary component of this solution is the regular expression matched against, but it's worth going over the other parts of the program.
+
+We first import Python's standard library module for regular expressions, `re`, and are able to use a semicolon to declare our function on the same line. To save on space, a lambda function is declared with `s`, the string we modify, as the only parameter.
+
+The modified string we return is a return value from `re.sub()`, a regex method that takes at least three parameters: the pattern we match against, the replacing string or function, and the string being substituted. The function iterates through the string we want to substitute in and looks for pattern matches, either directly replacing the matched pattern with a string or passing it into a function we define and replacing it with the return value of the function. In our case, we take the latter approach to dynamically replace the matched pattern with the acronym we need. First, let's look at the regex pattern.
+
+### Regular Expression
+
+We want to start our regex by matching at least one capitalized word, followed by only whitespace, followed by a terminating capitalized word. We may start with something like this:
+
+```python
+r'([A-Z][a-zA-Z]*\s){2,}'
+```
+
+For those who aren't familiar, we start by matching a capital letter (`[A-Z]`), followed by any number of any case letters (the asterisk tells the matcher to match as many repetitions as possible, 0 or more). Then we match any whitespace character (`\s`), and wrap the whole expression in parenthesis to look for repetitions of it. The `{2,}` syntax at the end tells the matcher to look for at least 2 repetitions of the previous expression. Here is the result of this regex:
+
+```python
+acronymize('Students at Penn State University enjoy Computer Science.')
+# matched               ^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^
+'Students at PSUenjoy CS.'
+```
+
+This initial approach suffers from a major drawback: spacing after the final word in the acronym is lost. There is no short way to add the lost spacing back in, and I wasn't able to find a good workaround in regex, so we instead pivot to an approach of using two expressions, one for the every word up to the last, and one for the last word.
+
+```python
+r'([A-Z][a-zA-Z]*\s)+[A-Z][a-zA-Z]*'
+```
+
+Here, we use the same technique for matching the capitalized words, following the first expression group with a `+` to denote that we want to match at least one repetition of the group. After that, we put in an expression for the final capitalized word, making sure to omit any whitespace matching to preserve spacing. We are able to shorten this by replacing `[a-zA-Z]` with `\w` to match to the end of a Unicode word (equivalent to a `[a-zA-Z0-9_]` match if strings are ASCII-only).
+
+```python
+r'([A-Z]\w*\s)+[A-Z]\w*'
+```
+
+At a glance, the repetition of the initial expression (`[A-Z]\w*`) is annoying, but trying to format the string and replacing those wasn't a viable alternative. I settled at this regex after exhausting some time looking for a shorter version, but stopped at this regex.
+
+### Replacement Function
+
+Once we call the regex match, our replacement function is passed a `re.Match` object. This object contains several "groups", which are produced according to the regex we use. Any expressions between parentheses that are not denoted as a non-capturing group are capturing groups, which each produce a seperate group. We do not need to worry about any of the captured groups aside from the first, which contains the entire matched expression. To access this, we index the `re.Match` object with square brackets at index 0.
+
+```python
+lambda x:''.join(a[0]for a in x[0].split())
+```
+
+Afterwards, we split the group into seperate words using `.split()` and loop through them, getting the first character from each word (`a[0]`). Because `.join()` take an iterable as an argument, there is no need to use square brackets and utilize list comprehension, and we can instead pass the loop directly to it. By calling `.join()` on an empty string, the first character of each word is concatenated without spacing, and we pass this entire `lambda` replacement function to the regex function.
+
+## Conclusion
+
+Regular expressions are certainly a powerful tool that can be effective in many applications. Although regular expressions seem intimidating to the uninitiated, tools such as [regex101](https://regex101.com/r/pYEkyC/1) provide great live visuals to experiment with regular expressions.
