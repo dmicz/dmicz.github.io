@@ -21,7 +21,7 @@
 title: dmicz devblog
 email: dennis.miczek@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Making provocative programs since 2023.
+  Dennis Miczek
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://dmicz.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  dmicz
