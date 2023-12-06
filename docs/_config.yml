@@ -27,6 +27,7 @@ github_username:  dmicz
 theme: minima
 plugins:
   - jekyll-feed
+permalink: /:categories/:title/
 
 defaults:
 - scope:
