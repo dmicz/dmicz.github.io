@@ -4,8 +4,7 @@ title: About
 permalink: /about/
 ---
 
-My name is Dennis Miczek, and I'm a first-year student at the Pennsylvania State University. I have interests in both software engineering and computer engineering that I attempt to 
-bring together through my projects. 
+Welcome to my blog! My name is Dennis Miczek, and I'm currently pursuing a Computer Science major at the Pennsylvania State University, with deep interests in machine learning and software engineering. In my projects, I seek to understand the intricate algorithms that power today's innovations and apply them to solve real-world problems. This blog serves as a canvas for my thoughts, experiments, and discoveries in the ever-evolving world of technology.
 
 You can find out more about me on LinkedIn:\
 [**LinkedIn**](https://www.linkedin.com/in/dennis-miczek/)
