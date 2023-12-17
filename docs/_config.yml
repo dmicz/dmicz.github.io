@@ -26,6 +26,7 @@ github_username:  dmicz
 # Build settings
 plugins:
   - jekyll-feed
+  - jekyll-seo-tag
 permalink: /:categories/:title/
 
 defaults:
