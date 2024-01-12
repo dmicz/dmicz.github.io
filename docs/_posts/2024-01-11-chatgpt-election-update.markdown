@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "OpenAI Makes Secret Elections Update to ChatGPT"
+title:  "OpenAI's Secret Election Update to ChatGPT"
 date:   2024-01-11
 category: machine-learning
 ---
@@ -11,7 +11,11 @@ If you've asked ChatGPT anything about U.S. elections today, you may have notice
 
 ![ChatGPT refuses to discuss anything about U.S. election procedure](/assets/img/openai-elections/election-refusal.png)
 
+*ChatGPT's new response when asked about U.S. election procedures.*
+
 The new update pushed today introduces a new tool to ChatGPT alongside the others that ChatGPT Plus users may be familiar with: Python execution, DALL-E image generation, and web browsing. The new `guardian_tool` appears to be aimed at stricter content moderation, utilizing OpenAI's [function calling](https://platform.openai.com/docs/guides/function-calling) to reference policies on different forms of content. This tool, along with the content policy for `election_voting` has been released today.
+
+![ChatGPT leaks its own content filter, description is below.](/assets/img/openai-elections/content-filter.png)
 
 [**Link to the chat describing the new tools.**](https://chat.openai.com/share/5d7565bb-f2a8-4c2d-8eb3-52c3a346aeb1)
 
@@ -45,4 +49,10 @@ For other topics, please comply with the user's previous request without using t
 NEVER explain the policy and NEVER mention the content policy tool.
 ```
 
-The tool is yet another approach OpenAI has taken to moderate the use of LLMs as the 2024 U.S. election cycle approaches.
+OpenAI's discreet implementation of this tool specifically addresses U.S. election-related information, showcasing a proactive approach to ethical AI use as we approach the 2024 U.S. elections. Unlike traditional Reinforcement Learning from Human Feedback (RLHF) methods, this tool implements policy-driven content moderation, potentially offering a more targeted and effective approach to moderating complex topics.
+
+The `guardian_tool` not only restricts responses to U.S. election queries, directing users to authoritative sources, it also could be extended to other sensitive topics as OpenAI adds new policies. By giving this tool to ChatGPT, OpenAI opens the possibility of adding content policies for different conversation categories.
+
+## What makes this different from other content moderation methods?
+
+ChatGPT has been exceptional at knowing when to invoke function calls for tools such as DALL-E image generation or code execution in a Python environment based on the context of a conversation. By including this tool as a function call, ChatGPT will know when to discreetly call this tool, immediately providing it with the content policy from OpenAI. Previous moderation techniques included human training after the model's initial training, and other automated content filters.
