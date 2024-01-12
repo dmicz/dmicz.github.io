@@ -5,7 +5,7 @@ date:   2023-11-28
 category: machine-learning
 ---
 
-I've been working on and off with the my [digit recognition project](/machine-learning/2023/11/03/neural-networks-1) between other machine learning coursework, and am pleased to share my new developments on this project. For the full source code, please visit my [GitHub repo](https://github.com/dmicz/NNDigitKit).
+I've been working on and off with the my [digit recognition project](/machine-learning/neural-networks-1) between other machine learning coursework, and am pleased to share my new developments on this project. For the full source code, please visit my [GitHub repo](https://github.com/dmicz/NNDigitKit).
 
 ## Code refactoring
 
