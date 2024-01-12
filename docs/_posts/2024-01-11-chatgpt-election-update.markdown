@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "OpenAI's Secret Election Update to ChatGPT"
+title:  "OpenAI Quietly Updates ChatGPT for Election Content Moderation"
 date:   2024-01-11
 category: machine-learning
 ---
