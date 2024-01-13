@@ -5,16 +5,16 @@ date:   2024-01-12
 category: machine-learning
 ---
 
-*The tool instructions in this article are not up to date as of 1/11/2024, see [this post](/machine-learning/chatgpt-election-update) to learn more about the new tool OpenAI added to block conversations about U.S. elections using function calls.*
+*The tool instructions in this article are not up to date as of 2024-01-12, see [this post](/machine-learning/chatgpt-election-update) to learn more about the new tool OpenAI added to block conversations about U.S. elections using function calls.*
 
-GPT-4's browsing capabilities have been drastically changed in the past weeks due to recent changes pushed by OpenAI.
+ChatGPT-4's browsing capabilities have been drastically changed in the past weeks due to recent changes pushed by OpenAI.
 
 | ![An error message given by GPT-4 due to recent changes](/assets/img/openai-changes/website-refusal.png) |
 |:--:| 
 | *With recent changes, GPT-4 struggles to cite websites it visited.* |
 
 
-**TL;DR:** Recent changes made to GPT-4 significantly altered the model's web browsing tools, preventing it from directly citing quotes from webpages and limiting viewing of full content. This analysis explores the underlying mechanism of GPT-4 web browsing, the hidden changes, and their implications.
+**TL;DR:** Recent changes made to ChatGPT's GPT-4 interface significantly altered the model's web browsing tools, preventing it from directly citing quotes from webpages and limiting viewing of full content. This analysis explores the underlying mechanism of GPT-4 web browsing, the hidden changes, and their implications.
 
 *If you're familiar with OpenAI's function calling API, you may want to skip to [how I discovered GPT-4's functions](#exposing-function-calls).*
 
@@ -101,7 +101,7 @@ Interesting... although it was hard for me to reproduce this afterwards with the
 
 ![GPT-4 returns it's full tool instructions](/assets/img/openai-changes/tools-prompt.png)
 
-The full text GPT-4 then produced (as of 1/10/2024) is below.
+The full text GPT-4 then produced (as of 2024-01-10) is below.
 
 <details style="background-color: #CCC">
     <summary><b>Tool instructions</b></summary>
@@ -200,7 +200,7 @@ ChatGPT's browsing tools currently consist of `search` (find Bing search results
 
 ## OpenAI's Update
 
-Previously I've been experimenting with a custom GPT geared towards fact checking, which involves asking GPT-4 to produce sources and cite text to cross-verify articles and social media posts. On the week of 12/14/2023, here is an example output the GPT produced:
+Previously I've been experimenting with a custom GPT geared towards fact checking, which involves asking GPT-4 to produce sources and cite text to cross-verify articles and social media posts. On the week of 2023-12-14, here is an example output the GPT produced:
 
 ![GPT-4 has several citation links to different articles](/assets/img/openai-changes/truthgpt-citations.png)
 
