@@ -756,3 +756,4 @@ plt.show()
 ![png](/assets/img/svd_compression/svd_compression_36_0.png)
     
 
+*For HN discussion, [click here](https://news.ycombinator.com/item?id=38695478).*
