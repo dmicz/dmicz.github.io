@@ -7,6 +7,8 @@ category: machine-learning
 
 *I have [another post](/machine-learning/openai-changes) explaining function calls as used by GPT-4, as well as other updates made by OpenAI recently.*
 
+*2024-01-15 UPDATE: OpenAI recently announced in a [blog post](https://openai.com/blog/how-openai-is-approaching-2024-worldwide-elections) how it is handling elections.*
+
 **TL;DR:** OpenAI quietly launched a new form of content moderation for ChatGPT, disallowing it from replying to "general requests about voting and election-related voter facts and procedures in the U.S.", while allowing requests about elections outside of the U.S.
 
 If you've asked ChatGPT anything about U.S. elections today, you may have noticed that it refuses to answer and redirects users to [CanIVote.org](https://www.canivote.org/).
