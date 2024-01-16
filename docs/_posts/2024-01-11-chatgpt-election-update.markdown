@@ -60,3 +60,9 @@ The `guardian_tool` not only restricts responses to U.S. election queries, direc
 ## What makes this different from other content moderation methods?
 
 ChatGPT has been exceptional at knowing when to invoke function calls for tools such as DALL-E image generation or code execution in a Python environment based on the context of a conversation. By including this tool as a function call, ChatGPT will know when to discreetly call this tool, immediately providing it with the content policy from OpenAI. Previous moderation techniques included human training after the model's initial training, and other automated content filters.
+
+## How do we know this is not simply a hallucination?
+
+The ability to get ChatGPT-4 and other models to repeat their system prompts is well-documented and is unlikely to be a hallucination. I cover this possibility in my Hacker News comment [here](https://news.ycombinator.com/item?id=38976809). Hallucinations are known to vary wildly from generation to regeneration, as they are often associated with great uncertainty in the next token to generate.
+
+As an example, one could create a quote that does not exist, and ask ChatGPT to attribute it to a person. Although the model is sometimes able to say the quote is not well-recognized, under certain conditions, ChatGPT will give a person's name, which will likely change with every regeneration. Because we have several independently reached system prompts, each done by different people, several times, and through different prompts, we can confidently say this prompt at least indicates at ChatGPT's capabilities and restrictions.
