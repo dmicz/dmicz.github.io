@@ -141,18 +141,31 @@ blockquote {
   }
 }
 
-
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  font-size: 130%;
+}
 
 /**
  * Code formatting
  */
+.language-plaintext.highlighter-rouge pre,
+.language-plaintext.highlighter-rouge div,
+.language-plaintext.highlighter-rouge code {
+  background: none;
+}
+
+.language-plaintext.highlighter-rouge pre {
+  border: none;
+  padding: 0;
+  white-space: pre-wrap;
+}
+
 pre,
 code {
   @include relative-font-size(0.9375);
   border: 1px solid $grey-color-light;
   border-radius: 3px;
-  background-color: #222;
-  color: #fff;
+  background-color: #ddd;
 }
 
 code {
