@@ -142,7 +142,11 @@ blockquote {
 }
 
 mjx-container[jax="CHTML"][display="true"] mjx-math {
-  font-size: 130%;
+  font-size: 130%; 
+}
+
+mjx-container {
+  font-size: 1em !important;
 }
 
 /**
