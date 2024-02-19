@@ -29,6 +29,11 @@ plugins:
   - jekyll-seo-tag
 permalink: /:categories/:title/
 
+collections:
+  essays:
+    output: true
+    permalink: /essays/:title/
+
 defaults:
 - scope:
     path: "assets/img"

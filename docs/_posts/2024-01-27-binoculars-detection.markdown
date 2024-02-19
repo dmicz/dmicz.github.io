@@ -16,7 +16,7 @@ category: machine-learning
 
 The ability to detect AI-generated text is an important issue, not only because of academic integrity issues, but also due to misinformation, security, and copyright concerns. A new method for detection of machine-generated text, called *Binoculars*, achieves over 90% accuracy in detection at a 0.01% false positive rate. In this notebook, I annotate key parts of the paper, explaining the mechanisms behind this new method and implementing it piece-by-piece. Code from the original paper is available [here](https://github.com/ahans30/Binoculars/tree/main) and this Jupyter Notebook is available [here](https://github.com/dmicz/devblognotebooks).
 
-The authors of the paper have also created a [HuggingFace Space](https://huggingface.co/spaces/tomg-group-umd/Binoculars) to try out the method.
+The authors of the paper have also created a [Hugging Face Space](https://huggingface.co/spaces/tomg-group-umd/Binoculars) to try out the method.
 
 ![The new Binoculars paper shows significant improvment from previous SoTA models.](/assets/img/binoculars/paper_detection_stats.png)
 

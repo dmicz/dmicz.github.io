@@ -1,0 +1,4 @@
+---
+layout: essays
+title: Essays
+---
