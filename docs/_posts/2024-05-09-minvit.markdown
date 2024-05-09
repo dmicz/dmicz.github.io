@@ -5,6 +5,8 @@ date:   2024-05-09
 category: machine-learning
 ---
 
+**[Video](https://www.youtube.com/watch?v=krTL2uH-L40) and [GitHub repo](https://github.com/dmicz/minViT/) to go along with this post.**
+
 In this post, I explain the vision transformer (ViT) architecture, which has found its way into computer vision as a powerful alternative to Convolutional Neural Networks (CNNs).
 
 This implementation will focus on classifying the CIFAR-10 dataset, but is adaptable to many tasks, including semantic segmentation, instance segmentation, and image generation. As we will see, training small ViT models is difficult, and the [notebook on fine-tuning](https://github.com/dmicz/minViT/blob/main/finetune.ipynb) ([later](#finetuning-larger-vits-on-small-datasets) in this post) explains how to get around these issues.
