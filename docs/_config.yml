@@ -25,7 +25,7 @@ url: "https://dmicz.github.io" # the base hostname & protocol for your site, e.g
 github_username:  dmicz
 twitter_username: dennis_miczek
 author: Dennis Miczek
-title_image: /assets/img/favicon.png
+title_image: "https://dmicz.github.io/assets/img/favicon.png"
 # Build settings
 plugins:
   - jekyll-feed
