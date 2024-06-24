@@ -270,3 +270,21 @@ table {
     border: 1px solid $grey-color-light;
   }
 }
+
+.series-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2em;
+}
+
+.prev-post, .next-post {
+  padding: 10px 15px;
+  background-color: #f0f0f0;
+  text-decoration: none;
+  color: #333;
+  border-radius: 5px;
+}
+
+.prev-post:hover, .next-post:hover {
+  background-color: #e0e0e0;
+}

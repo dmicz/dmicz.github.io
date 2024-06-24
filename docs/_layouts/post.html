@@ -19,6 +19,32 @@ layout: default
     {{ content }}
   </div>
 
+  {% if page.series %}
+    {% assign series_posts = site.posts | where: "series", page.series | sort: "date" %}
+    {% assign series_index = nil %}
+    {% for post in series_posts %}
+      {% if post.url == page.url %}
+        {% assign series_index = forloop.index0 %}
+      {% endif %}
+    {% endfor %}
+    
+    <div class="series-navigation">
+      {% if series_index > 0 %}
+        {% assign prev_index = series_index | minus: 1 %}
+        {% assign prev_post = series_posts[prev_index] %}
+        <a href="{{ prev_post.url | relative_url }}" class="prev-post">← {{ prev_post.title }}</a>
+      {% else %}
+        <i class="prev-post">Start of {{ page.series }} series</i>
+      {% endif %}
+      {% assign series_size = series_posts.size | minus: 1 %}
+      {% if series_index < series_size %}
+        {% assign next_index = series_index | plus: 1 %}
+        {% assign next_post = series_posts[next_index] %}
+        <a href="{{ next_post.url | relative_url }}" class="next-post">{{ next_post.title }} →</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
   {%- endif -%}
