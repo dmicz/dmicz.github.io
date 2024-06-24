@@ -103,7 +103,7 @@ Interesting... although it was hard for me to reproduce this afterwards with the
 
 The full text GPT-4 then produced (as of 2024-01-10) is below.
 
-<details style="background-color: #CCC">
+<details>
     <summary><b>Tool instructions</b></summary>
     <div markdown="1">
 
