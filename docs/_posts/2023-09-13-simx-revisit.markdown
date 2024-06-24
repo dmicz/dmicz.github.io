@@ -7,7 +7,7 @@ category: simx
 
 Welcome to my first devblog! I'm going to be revisiting a project I started working on in high school titled **SimX**, which was intended to be a simple, general purpose 2D physics simulator. I mostly wrote it after my first semester in AP Physics, as an attempt to get back into programming with C++ and review some physics concepts.
 
-# Revisiting old code
+## Revisiting old code
 
 To my surprise, the project started without error after downloading the dependencies on my laptop:
 
@@ -61,7 +61,7 @@ void PhysicsScene::RunForSeconds(double secondsToRun, double deltaTSeconds)
 }
 {% endhighlight %}
 
-# Future plans
+## Future plans
 
 As of right now, the program only allows the user to drop blocks using their cursor, calculating acceleration on the block from gravity and stopping the block from going through another block (without the use of normal forces??).
 

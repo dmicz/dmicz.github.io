@@ -104,8 +104,14 @@
   }
 }
 
-.dark-mode .site-nav .page-link {
-  color: $grey-color-light;
+.dark-mode .site-nav {
+  .page-link {
+    color: $grey-color-light;
+  }
+  
+  @include media-query($on-palm) {
+    background-color: #1a1a1a;
+  }
 }
 
 

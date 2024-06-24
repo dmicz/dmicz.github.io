@@ -9,7 +9,7 @@ Welcome to my first post about code golf! I am still working on SimX, but was re
 
 As I write this post and its updates the code golf contest is ongoing, so this is published a week after I finished working on the contest. 
 
-# Contents
+## Contents
 1. [Problem Statement](#problem-statement)
 2. [Basic Solution [1074 bytes]](#basic-solution-1074-bytes)
 3. [Mapping grades to points [696 bytes]](#mapping-grades-to-points-696-bytes)
@@ -403,7 +403,7 @@ View my ~~[update](#update-231-bytes)~~ and [second update](#update-2-214-bytes)
 
 I wouldn't be comfortable saying my submission was my best effort without exploring the many avenues for improvement. I'd also like to note that generating ideas for potential code reductions and writing them down is an important concept; many of the ideas I will write about here could be applied to future challenges with minor differences in the parameters.
 
-# Procedural generation
+## Procedural generation
 
 One of the longest pieces of code in the program is the map of letter grades to numbers:
 
@@ -459,7 +459,7 @@ Some other thoughts this line of thinking prompted:
 
 **EDIT**: In [update 1](#dict-alternative) and [update 2](#update-2-214-bytes) I write about some `dict` alternatives that *do* work. I think the lesson to take from those is to follow my hunch about some piece of code being too long. ;)
 
-# Dot product
+## Dot product
 
 Perhaps you noticed the following pattern within the math part of our code:
 
@@ -524,7 +524,7 @@ The code golf contest was still ongoing at the time of writing this, and after s
 <div style="background:#80dca9; line-height:16.9px; font-size: 13px;word-break: break-all;text-align: left; color:#2C363C; font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, Courier, monospace; padding: 8px 12px; position: relative; white-space: pre-wrap; overflow-wrap: break-word; padding-right: 20px; display: table-cell;"><span>gradeCalculator=lambda a,b,c,d,e,f,g,h:"You "+(f"need a </span><span style="background:#2ea769;margin: 0;padding: 0;border: 0;">{max(0,l:=-int(-((b'^TG=□[XQN'[([*'ABCDF']+['A-','B+','B-','C+']).index(h)]-1-min(2,g/9*2))*100-a*30-b*20-(c+d)*14-e*6-f*5)//9))}</span><span> to","cannot")[l&gt;100]+f" get a {h} in the class"</span></div>
 <br>
 
-# Dict alternative
+## Dict alternative
 
 I wrote about `dict`s and ways to shorten making one earlier, including zipping two lists together to get a dict, potentially cutting down on bytes used.
 
@@ -560,7 +560,7 @@ b'^TG=□[XQN'[([*'ABCDF']+['A-','B+','B-','C+']).index(h)]-1
 
 The `int`s in the list are replaced by their corresponding ASCII representation, eliminating the need for tradition list syntax. This approach saves *10 bytes*, getting us much closer to a more optimal solution. The grade `'F'` corresponds to a value of `0`, but we can't use a NUL character in the middle of the byte string. Instead, I increased all the other byte string characters by 1 and appended `-1` to the end of the expression.
 
-# More math
+## More math
 
 I avoided focusing on the second half of the `l` variable expression, believing it to be as short as possible. This was not the case:
 

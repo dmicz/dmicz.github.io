@@ -4,7 +4,78 @@
   {%- include head.html -%}
 
   <body>
+    {% if page.layout == "post" %}
+      <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const headings = document.querySelectorAll('h2, h3, h4, h5, h6');
 
+        headings.forEach((heading, index) => {
+          if (!heading.id) {
+            heading.id = 'heading-' + index;
+          }
+
+          // Create the permalink
+          const permalink = document.createElement('a');
+          permalink.classList.add('heading-permalink');
+          permalink.href = '#' + heading.id;
+          permalink.textContent = '#';
+          permalink.setAttribute('aria-label', 'Permalink to this section');
+
+          heading.appendChild(permalink);
+        });
+      });
+      </script>
+      <style>
+        .heading-permalink {
+          font-size: 0.8em;
+          margin-left: 5px;
+          color: #ccc;
+          text-decoration: none;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+
+        h1:hover .heading-permalink,
+        h2:hover .heading-permalink,
+        h3:hover .heading-permalink,
+        h4:hover .heading-permalink,
+        h5:hover .heading-permalink,
+        h6:hover .heading-permalink {
+          opacity: 1;
+        }
+      </style>
+      <div id="readingProgressBar"></div>
+
+      <style>
+        #readingProgressBar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 0;
+          height: 4px;
+          background-color: #007bff;
+          z-index: 9999;
+          transition: width 0.1s ease;
+        }
+      </style>
+
+      <script>
+        const progressBar = document.getElementById('readingProgressBar');
+
+        function updateReadingProgress() {
+          const windowHeight = window.innerHeight;
+          const documentHeight = document.documentElement.scrollHeight;
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollDistance = documentHeight - windowHeight;
+          const scrollPercentage = (scrollTop / scrollDistance) * 100;
+
+          progressBar.style.width = scrollPercentage + '%';
+        }
+
+        window.addEventListener('scroll', updateReadingProgress);
+        window.addEventListener('resize', updateReadingProgress);
+      </script>
+    {% endif %}
     {%- include header.html -%}
 
     <main class="page-content" aria-label="Content">
@@ -25,7 +96,7 @@
 
 <style>
   :root {
-    --background-color: #ffffff;
+    --background-color: #eee;
     --text-color: #333333;
   }
 
