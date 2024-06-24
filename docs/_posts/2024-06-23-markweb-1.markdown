@@ -1,0 +1,126 @@
+---
+layout: post
+title:  "MarkWeb: Kickoff + Dodging a $300/yr SSL Bullet"
+date:   2024-06-23
+category: software-engineering
+---
+
+Welcome to the kickoff post for [**MarkWeb**](https://markweb.app), my attempt at building a markdown-based blogging platform. Here's how I set up the webapp:
+
+## The Stack
+
+- **Backend:** Python/Flask
+- **Frontend:** HTML, CSS, JS
+- **Database:** PostgreSQL
+- **Hosting:** Azure (already working in VS Code and more familiar with Azure)
+
+Here's a quick architecture rundown:
+
+My Flask app is on a private GitHub repo, and directly deploys to my Azure web app with GitHub Actions.
+
+I have a PostgreSQL server also running on Azure, which I connect to from the Flask app with SQLAlchemy.
+
+I also had an communication/email service set up on Azure, which would provide me with a free 100 outbound emails a day from my custom domain, but it does not include an inbox and is difficult to scale (requires filing customer support tickets with Microsoft). I got a Google Workspace account for this, which provides limits that are plenty high for my current stage. I'm currently sending emails with Flask-Mail through SMTP, but will need to switch to Gmail's API as [Google is phasing out SMTP support for Google Workspace users](https://workspaceupdates.googleblog.com/2023/09/winding-down-google-sync-and-less-secure-apps-support.html).
+
+Later, I plan to store user-provided images in Azure Blob Storage and potentially add other Azure networking services.
+
+## Dynamic Subdomains
+
+Like GitHub Pages, I planned to give users their own subdomain at `<username>.markweb.app`, which would give users a feeling of ownership over their own blogs and content. I kicked implementing this further and further down the road, until a couple of days ago. Implementing this seemed really simple, as it only requires a minor change in the backend code:
+
+```python
+# Subdirectory routing
+@bp.route('/<username>')
+def profile(username):
+    # ...
+    
+# Subdomain routing!
+@bp.route('/', subdomain='<username>')
+def profile(username):
+    # ...
+```
+
+This works just fine when locally hosting, with some additional changes in app configuration. First to support subdomains, we need to point some URL at `localhost:5000`. This is because `127.0.0.1:5000` and `localhost:5000` aren't proper domains, and browsers won't resolve subdomain routing from them (**correction**: as I write this, I realize that `*.localhost:5000` does resolve in Chrome, but I go through this process anyways to make sure `url_for` generates proper URLs and `SERVER_NAME` is working in production). This can be done by editing the `hosts` file (on Windows: `%SystemRoot%\System32\drivers\etc\hosts`):
+
+```bash
+127.0.0.1    markweb.test
+127.0.0.1    admin.markweb.test
+127.0.0.1    dmicz.markweb.test
+127.0.0.1    www.markweb.test
+```
+
+These lines help the OS map hostnames to IP addresses. Unfortunately, the hosts file does not support wildcard subdomain entries (tools like dnsmasq or Acrylic provide support for this), which means I need to manually enter subdomains I want to visit. Then, when testing locally, my Flask app is available at `markweb.test:5000`. Additionally, `SERVER_NAME` and `SESSION_COOKIE_DOMAIN` needs to be configured to help Flask find where to point links to and store cookies at:
+
+```python
+    SERVER_NAME=os.environ.get('SERVER_NAME', 'markweb.test:5000'),
+    SESSION_COOKIE_DOMAIN=os.environ.get('SESSION_COOKIE_DOMAIN', '.markweb.test:5000'),
+```
+
+Session cookies should be stored at `.markweb.app` in production, which allows sessions to be accessible from all subdomains of `markweb.app`. Otherwise, each subdomain would store sessions separately.
+
+## DNS + SSL Issues
+
+Rather than locking myself in to Vercel or Netlify, I settled for using Azure to host my app and Cloudflare to configure my domain and DNS zone. I briefly considered self-hosting this service as an educational experience, but am pushing that off for later. Although this means I have to waddle through the mess that cloud platforms like Azure can be, I quickly familiarized myself with Microsoft's documentation and got my app running.
+
+This was fine until I needed to implement dynamic subdomain routing. Adding a custom domain to an Azure web app does not include subdomains, so we need to use hostname `*.markweb.app`. The * is used for wildcard DNS records, which match to any existing subdomain name. However, Azure has somewhat unclear error messaging when entering this domain that suggests an SSL certificate should be added later.
+
+![Image of Azure showing error when trying to enter *.markweb.app as a custom domain, with error message: "App Service Managed Certificate only supports alphanumeric, dash, and period characters. If you need to use special characters for your custom domain, select "Add certificate later" and secure it with another trusted certificate."](/assets/img/markweb1/custom-domain-error.png)
+
+Microsoft's documentation confirms that Azure does not provide wildcard SSL certificates, so unfortunately I need to look for one. Just checking with Azure:
+
+![Image of Azure offering a Wildcard SSL Certificate for $300/year.](/assets/img/markweb1/azure-create-ssl-certificate.png)
+
+$300/yr for a certificate was not happening for me. I originally looked at [Azure Front Door](https://azure.microsoft.com/en-us/pricing/details/frontdoor/) to see if it would provide the certificates, but starting at \\$35/month ($420/year), it was also a nonstarter.
+
+Thankfully, I figured out that Cloudflare can provide wildcard SSL certificates for free by enabling proxying. Cloudflare also provides extremely helpful [documentation](https://developers.cloudflare.com/ssl/) on their Cloudflare SSL/TLS. Originally, I avoided setting DNS records to be proxied through Cloudflare as I was verifying my custom domain through Azure, because Azure would struggle with verifying the records. This is because the proxied records would point to Cloudflare's servers, which forwards traffic to Azure's. But when switching back to proxied status after setting up the custom domain and setting SSL/TLS mode to Full (Strict), everything worked perfectly.
+
+![Image of Cloudflare dashboard with DNS records set to be proxied through Cloudflare](/assets/img/markweb1/cloudflare-dashboard-proxy.png)
+
+Because the traffic is not proxied through Cloudflare, Cloudflare provides free edge certificates for between itself and the browser, as well as free origin certificates for its connection with Azure's servers. These certificates are in text format, so I use `openssl` to get a `.pfx` to upload to Azure.
+
+```bash
+openssl pkcs12 -export -out certificate.pfx -inkey privateKey.key -in certificate.crt
+```
+
+After uploading, everything worked smoothly, for as many subdomains as I needed. 
+
+Another option I considered was to use [Let's Encrypt](https://letsencrypt.org/) with Certbot, but this would require a VM to run the Certbot client and would be more difficult to automate.
+
+## CORS Issues
+
+Another issue comes with using dyanmic subdomains. When I tried to access certain resources from a subdomain, I got a CORS error. Specifically, `https://markweb.app/static/site.webmanifest` is not accessible from `https://<username>.markweb.app/` due to the cross origin request. This is because the browser blocks requests from different origins by default. CORS is important because it prevents malicious websites from accessing your resources, but can be a pain to deal with when you're trying to access your own resources. To fix this, I added the following to my Flask app:
+
+```python
+# at top of app file
+from flask_cors import CORS
+cors = CORS()
+...
+# in app config
+SERVER_NAME = os.environ.get('SERVER_NAME', 'markweb.test:5000')
+...
+# after app is created
+cors.init_app(app, resources={r"/static/*": {"origins": [f"https://*.{app.config['SERVER_NAME']}", f"http://*.{app.config['SERVER_NAME']}"]}})
+```
+
+In this case, `SERVER_NAME` was set to `markweb.app` when hosting, and `markweb.test:5000` for local development.
+
+In theory, this allows requests from any subdomain of `markweb.app` (`*.markweb.app`) to access the `/static/*` resources. This could be a minor security risk, as it allows any subdomain to access these resources, but the resources are public anyways and there are XSS protections in place. However, this code does not work in the first place because CORS does not support wildcards in the `Access-Control-Allow-Origin` header. Instead, I could set the header to `Access-Control-Allow-Origin: *` to allow all origins to access the resources (potential risk) or set the header to `Access-Control-Allow-Origin: https://<username>.markweb.app` to allow only the specific subdomain to access the resources per request.
+
+However, as it turns out [this issue](https://github.com/corydolphin/flask-cors/issues/54) has been solved in `flask-cors` back in 2014, and was easier to find in the repo's issues than in the documentation. The solution is to use regular expressions in the `origins` list to match the subdomains:
+
+```python
+cors.init_app(app, resources={r"/static/*": {"origins": rf".*\.{app.config['SERVER_NAME']}"}})
+```
+
+This regex matches any subdomain of `markweb.app`, and allows requests from those subdomains to access the `/static/*` resources.
+
+## What's Next?
+
+If you visit [MarkWeb](https://markweb.app/) right now, you'll see that everything is locked down for now. I'm still working on ensuring the safety and integrity of the app before launching, which should be complete within the next week. Stay tuned for more development + engineering updates on this blog, and on my [Twitter](https://x.com/dennis_miczek). Features I'll be working on this week:
+- Account management
+- Blog management/stylesheets
+- Blog homepage
+- RSS feed
+- Email notifications
+
+As a sidenote, [Flask](https://flask.palletsprojects.com/en/3.0.x/) is a very impressive web framework and makes building web apps both easy and fun. I'm excited to continue working with it and building out MarkWeb.
