@@ -16,5 +16,61 @@
     {%- include footer.html -%}
 
   </body>
+{% if page.style != "academic" %}
+<button id="darkModeToggle" aria-label="Toggle dark mode">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
 
+<style>
+  :root {
+    --background-color: #ffffff;
+    --text-color: #333333;
+  }
+
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  body.dark-mode {
+    --background-color: #1a1a1a;
+    --text-color: #ffffff;
+  }
+
+  #darkModeToggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  #darkModeToggle svg {
+    width: 24px;
+    height: 24px;
+    color: var(--text-color);
+  }
+</style>
+
+<script>
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  const body = document.body;
+
+  const currentTheme = localStorage.getItem('theme');
+  if (currentTheme) {
+    body.classList.add(currentTheme);
+  }
+
+  darkModeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    const theme = body.classList.contains('dark-mode') ? 'dark-mode' : '';
+    localStorage.setItem('theme', theme);
+  });
+</script>
+{% endif %}
 </html>

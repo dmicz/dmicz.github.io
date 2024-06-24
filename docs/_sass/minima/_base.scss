@@ -124,6 +124,10 @@ a {
   }
 }
 
+.dark-mode a:hover {
+  color: $grey-color-light;
+  text-decoration: underline;
+}
 
 /**
  * Blockquotes
@@ -174,6 +178,12 @@ code {
 
 code {
   padding: 1px 5px;
+}
+
+.dark-mode .highlight pre, .dark-mode code {
+  background-color: #000;
+  border-color: $grey-color-dark;
+  border-radius: 0;
 }
 
 pre {
@@ -271,20 +281,22 @@ table {
   }
 }
 
-.series-navigation {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2em;
+.dark-mode table {
+  color: $grey-color-light;
+  tr {
+    &:nth-child(even) {
+      background-color: #333;
+    }
+  }
+  th {
+    background-color: #1a1a1a;
+  }
 }
 
-.prev-post, .next-post {
-  padding: 10px 15px;
-  background-color: #f0f0f0;
-  text-decoration: none;
-  color: #333;
-  border-radius: 5px;
+details {
+  background: #ddd;
 }
 
-.prev-post:hover, .next-post:hover {
-  background-color: #e0e0e0;
+.dark-mode details {
+  background: #333;
 }
