@@ -10,10 +10,11 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">  
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta description="{{ page.summary | default: site.description }}">
 
   <meta name="twitter:site"    content="@{{ site.twitter_username }}">
   <meta name="twitter:creator" content="@{{ site.author }}">
-  <meta name="twitter:title"   content="{{ page.title }}">
+  <meta name="twitter:title"   content="{{ page.title | default: "dmicz devblog" }}">
 
   {% if page.summary %}
   <meta name="twitter:description" content="{{ page.summary }}">
