@@ -30,6 +30,7 @@ title_image: "https://dmicz.github.io/assets/img/favicon.png"
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-sitemap
 permalink: /:categories/:title/
 
 collections:
