@@ -3,6 +3,7 @@ layout: post
 title:  "SVD Image Compression, Explained"
 date:   2023-12-17
 category: machine-learning
+image: /assets/img/svd_compression/svd_compression_19_0.png
 ---
 
 **Singular Value Decomposition** (**SVD**) is a fundamental concept in linear algebra, and it is particularly important in the field of machine learning for tasks such as dimensionality reduction, data compression, and noise reduction.

@@ -4,6 +4,7 @@ title:  "MarkWeb: Kickoff + Dodging a $300/yr SSL Bullet"
 date:   2024-06-23
 category: software-engineering
 series: "MarkWeb"
+image: /assets/img/markweb1/custom-domain-error.png
 ---
 
 Welcome to the kickoff post for [**MarkWeb**](https://markweb.app), my attempt at building a markdown-based blogging platform. Here's how I set up the webapp:

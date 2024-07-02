@@ -3,6 +3,7 @@ layout: post
 title:  "Hidden Changes in GPT-4, Uncovered"
 date:   2024-01-12
 category: machine-learning
+image: /assets/img/openai-changes/website-refusal.png
 ---
 
 *The tool instructions in this article are not up to date as of 2024-01-12, see [this post](/machine-learning/chatgpt-election-update) to learn more about the new tool OpenAI added to block conversations about U.S. elections using function calls.*

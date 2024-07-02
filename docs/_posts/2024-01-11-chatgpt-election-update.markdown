@@ -3,6 +3,7 @@ layout: post
 title:  "OpenAI Quietly Updates ChatGPT for Election Content Moderation"
 date:   2024-01-11
 category: machine-learning
+image: /assets/img/openai-elections/election-refusal.png
 ---
 
 *I have [another post](/machine-learning/openai-changes) explaining function calls as used by GPT-4, as well as other updates made by OpenAI recently.*

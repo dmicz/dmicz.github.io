@@ -4,6 +4,7 @@ style: academic
 title:  "Detecting LLM-Generated Text with Binoculars"
 date:   2024-01-27
 category: machine-learning
+image: /assets/img/binoculars/paper_detection_stats.png
 ---
 
 <center>

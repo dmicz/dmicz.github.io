@@ -3,6 +3,7 @@ layout: post
 title:  "SimX Devblog 0: Revisiting SimX"
 date:   2023-09-13
 category: simx
+image: /assets/img/simx-demo1.png
 ---
 
 Welcome to my first devblog! I'm going to be revisiting a project I started working on in high school titled **SimX**, which was intended to be a simple, general purpose 2D physics simulator. I mostly wrote it after my first semester in AP Physics, as an attempt to get back into programming with C++ and review some physics concepts.

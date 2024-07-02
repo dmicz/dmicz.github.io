@@ -3,6 +3,7 @@ layout: post
 title:  "MNIST Digit Recognition with a Multilayer Perceptron"
 date:   2023-11-03
 category: machine-learning
+image: /assets/img/MultiLayerPerceptron.png
 ---
 
 *Short update on SimX: the project is taking the backburner right now as I pursue different academic goals, I may return to it at a later date.*

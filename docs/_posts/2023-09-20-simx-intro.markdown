@@ -3,6 +3,7 @@ layout: post
 title:  "SimX Devblog 1: Project Introduction"
 date:   2023-09-20
 category: simx
+image: /assets/img/simx-devenv1.png
 ---
 
 In case you haven't read the [last post](/simx/simx-revisit), the following project is inspired by my previous work on a basic physics simulator.
