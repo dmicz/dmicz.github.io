@@ -9,26 +9,64 @@ layout: default
 
   {{ content }}
 
-  {%- if site.posts.size > 0 -%}
-    <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
-    <ul class="post-list">
-      {%- for post in site.posts -%}
-      <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <h3>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | escape }}
-          </a>
-        </h3>
-        {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
-        {%- endif -%}
-      </li>
-      {%- endfor -%}
-    </ul>
 
+  {%- if site.posts.size > 0 -%}
+    <div class="container">
+      <div class="filter-container">
+          <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
+          <select class="category-select" id="categoryFilter">
+              <option value="all">All Categories</option>
+              {% assign categories = site.posts | map: "category" | uniq %}
+              {% for category in categories %}
+                  {% if category != null and category != empty %}
+                      <option value="{{ category | slugify }}">{{ category }}</option>
+                  {% endif %}
+              {% endfor %}
+          </select>
+      </div>
+        <div id="post-grid">
+            {%- for post in site.posts -%}
+            <div class="post-card" data-category="{{ post.category | slugify }}">
+                {% if post.image %}
+                <img src="{{ post.image }}" alt="{{ post.title }}" class="post-image">
+                {% else %}
+                <img src="/assets/img/blog-placeholder.png" alt="Default" class="post-image">
+                {% endif %}
+                <div class="post-card-content">
+                    <a class="post-link" href="{{ post.url | relative_url }}">
+                    <h2 class="post-title">{{ post.title | escape }}</h2>
+                    </a>
+                    {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+                    <p class="post-date">{{ post.date | date: date_format }}</p>
+                    <p class="post-excerpt">{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+                    {% if post.category %}
+                      <span class="post-category">{{ post.category }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
     <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
   {%- endif -%}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const postGrid = document.getElementById('post-grid');
+            const postCards = postGrid.getElementsByClassName('post-card');
 
+            categoryFilter.addEventListener('change', function() {
+                const selectedCategory = this.value;
+
+                for (let card of postCards) {
+                    if (selectedCategory === 'all' || card.dataset.category === selectedCategory) {
+                        card.classList.remove('hidden');
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
 </div>
