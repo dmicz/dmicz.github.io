@@ -11,8 +11,13 @@
   overflow: hidden;
   transition: box-shadow 0.3s ease;
 }
-.post-card:hover {
+
+.dark-mode .post-card:hover {
   box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
+}
+
+.post-card:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 .post-image {
   width: 100%;
