@@ -25,6 +25,7 @@ url: "https://dmicz.github.io" # the base hostname & protocol for your site, e.g
 github_username:  dmicz
 twitter_username: dennis_miczek
 author: Dennis Miczek
+sitesource: "https://github.com/dmicz/dmicz.github.io"
 title_image: "https://dmicz.github.io/assets/img/favicon.png"
 # Build settings
 plugins:
