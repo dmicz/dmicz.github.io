@@ -46,6 +46,17 @@ defaults:
     image: true
 future: true
 
+sass:
+  style: compressed
+
+assets:
+  compress:
+    css: sass
+  features:
+    automatic_img_size: false
+  sources:
+    - assets
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

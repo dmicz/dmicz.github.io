@@ -30,9 +30,10 @@
   <meta name="twitter:image" content="{{ site.title_image }}">
   {% endif %}
 
-  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+  {% capture date_str %}{{  site.time | date: '%s' }}{% endcapture %}
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url | append: '?v=' | append: date_str }}">
   {% if page.style %}
-  <link rel="stylesheet" href="{{ "/assets/" | append: page.style | append: ".css" | relative_url }}">
+  <link rel="stylesheet" href="{{ "/assets/" | append: page.style | append: ".css" | relative_url | append: '?v=' | append: date_str }}">
   {% endif %}
 
   <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">
