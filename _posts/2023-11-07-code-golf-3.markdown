@@ -3,6 +3,7 @@ layout: post
 title:  "Code Golf: Challenge 3"
 date:   2023-11-07
 category: code-golf
+series: "Code Golf"
 ---
 
 Welcome to the third breakdown of my code golf submissions for my introductory CS class. The problem for this challenge had a leaderboard for both non-regex and [regex](https://en.wikipedia.org/wiki/Regular_expression) solutions, and I decided to use regex to increase my familarity with it.

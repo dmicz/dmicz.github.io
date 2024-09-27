@@ -4,6 +4,7 @@ title:  "Neural Network Digit Recognition: Part 2"
 date:   2023-11-28
 category: machine-learning
 image: /assets/img/NNDK-visualstudiodebug1.png
+series: "NNDigitKit"
 ---
 
 I've been working on and off with the my [digit recognition project](/machine-learning/neural-networks-1) between other machine learning coursework, and am pleased to share my new developments on this project. For the full source code, please visit my [GitHub repo](https://github.com/dmicz/NNDigitKit).

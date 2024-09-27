@@ -3,6 +3,7 @@ layout: post
 title:  "Code Golf: Challenge 1"
 date:   2023-10-02
 category: code-golf
+series: "Code Golf"
 ---
 
 Welcome to my first post about code golf! I am still working on SimX, but was recently challenged to do a code golf challenge in my computer science class covering Python.
