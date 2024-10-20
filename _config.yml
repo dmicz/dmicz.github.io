@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: dmicz devblog
+title: Dennis Miczek
 description: "A blog about machine learning and software development."
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://dmicz.github.io" # the base hostname & protocol for your site, e.g. http://example.com
