@@ -1,0 +1,64 @@
+:root {
+  --font-body: "Helvetica Neue", "Neue Haas Grotesk", Helvetica, Arial, sans-serif;
+  --text-color: #111;
+  --bg-color: #f4f4f4;
+  --accent: #0072e3;
+  --max-width: 720px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+main {
+  max-width: var(--max-width);
+  margin: auto;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+h1, h2, h3 {
+  margin-top: 2rem;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+}
+
+.site-header {
+  background: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.site-nav {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+}
+.site-nav a {
+  font-weight: 500;
+}
+nav {
+    display: flex;
+    align-items: center;
+}

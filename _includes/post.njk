@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/styles/style.css">
+    <script>
+        window.MathJax = {
+        tex: { 
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+         },
+        svg: { fontCache: 'global' }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+  </head>
+  <body>
+  <header class="site-header">
+    <nav>
+      <a href="/" class="site-title">dmicz</a>
+      <ul class="site-nav">
+        <li><a href="/machine-learning/">ml</a></li>
+        <li><a href="/code-golf/">code-golf</a></li>
+        <li><a href="/about/">about</a></li>
+      </ul>
+    </nav>
+  </header>
+    <main>
+      <h1>{{ title }}</h1>
+      {{ content | safe }}
+    </main>
+  </body>
+</html>

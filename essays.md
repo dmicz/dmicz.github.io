@@ -1,0 +1,4 @@
+---
+title: Essays
+permalink: /essays/
+---

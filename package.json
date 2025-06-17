@@ -1,0 +1,17 @@
+{
+  "name": "dmicz.github.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "eleventy.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "eleventy --serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.1",
+    "eleventy-plugin-mathjax": "^2.0.4"
+  }
+}

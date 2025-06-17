@@ -1,0 +1,13 @@
+---
+layout: layout.njk
+---
+
+Welcome to website
+<ul>
+  {% for post in collections.posts | reverse %}
+    <li>
+      <a href="{{ post.url }}">{{ post.data.title }}</a>
+      <small>{{ post.date | date("YYYY-MM-DD") }}</small>
+    </li>
+  {% endfor %}
+</ul>

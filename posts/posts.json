@@ -1,0 +1,5 @@
+{
+  "eleventyComputed": {
+    "permalink": "/{{ category }}/{{ page.fileSlug }}/"
+  }
+}
