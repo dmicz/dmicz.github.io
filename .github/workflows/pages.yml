@@ -25,9 +25,8 @@ jobs:
 
       - uses: ruby/setup-ruby@v1
         with:
-          # Matches the era of the pinned gems (google-protobuf 3.23,
-          # sass-embedded 1.58); newer Rubies may lack precompiled variants.
-          ruby-version: '3.2'
+          # Keep in sync with .tool-versions.
+          ruby-version: '3.4.5'
           bundler-cache: true
 
       - name: Build

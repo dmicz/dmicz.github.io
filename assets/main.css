@@ -691,6 +691,7 @@ mjx-container[display="true"] {
 .highlight .s,
 .highlight .s1,
 .highlight .s2,
+.highlight .sa,
 .highlight .sb,
 .highlight .sc,
 .highlight .sd,
@@ -714,6 +715,7 @@ mjx-container[display="true"] {
   color: var(--syn-number);
 }
 
+.highlight .bp,
 .highlight .nb,
 .highlight .nc,
 .highlight .nf,
