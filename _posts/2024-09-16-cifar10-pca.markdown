@@ -1,5 +1,5 @@
 ---
-layout: post
+math: true
 title:  "Implementing PCA and Dual PCA on CIFAR-10"
 date:   2024-09-16
 category: machine-learning

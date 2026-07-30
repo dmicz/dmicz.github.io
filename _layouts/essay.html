@@ -8,16 +8,13 @@ layout: default
       <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
         {{ page.date | date: site.date_format }}
       </time>
-      {%- if page.category %} <span class="sep">&middot;</span> {{ page.category }}{% endif -%}
-      {%- if page.series %} <span class="sep">&middot;</span> {{ page.series | escape }}{% endif -%}
+      <span class="sep">&middot;</span> <a href="{{ '/essays/' | relative_url }}">Essays</a>
     </p>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
     {{ content }}
   </div>
-
-  {%- include series-nav.html -%}
 
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>

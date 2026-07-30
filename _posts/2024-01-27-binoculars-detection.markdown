@@ -1,19 +1,14 @@
 ---
-layout: academic
-style: academic
+math: true
 title:  "Detecting LLM-Generated Text with Binoculars"
 date:   2024-01-27
 category: machine-learning
 image: /assets/img/binoculars/paper_detection_stats.png
 ---
 
-<center>
-<div markdown="1">
 [Spotting LLMs With Binoculars: Zero-Shot Detection of Machine-Generated Text](https://arxiv.org/abs/2401.12070)
-</div>
-</center>
 
-<img src="/assets/img/binoculars/authors.png" alt="Credit to authors Abhimanyu Hans, Avi Schwarzschild, Valeriia Cherepanova, Hamid Kazemi, Aniruddha Saha, Micah Goldblum, Jonas Geiping, and Tom Goldstein." width="70%">
+![Credit to authors Abhimanyu Hans, Avi Schwarzschild, Valeriia Cherepanova, Hamid Kazemi, Aniruddha Saha, Micah Goldblum, Jonas Geiping, and Tom Goldstein.](/assets/img/binoculars/authors.png)
 
 The ability to detect AI-generated text is an important issue, not only because of academic integrity issues, but also due to misinformation, security, and copyright concerns. A new method for detection of machine-generated text, called *Binoculars*, achieves over 90% accuracy in detection at a 0.01% false positive rate. In this notebook, I annotate key parts of the paper, explaining the mechanisms behind this new method and implementing it piece-by-piece. Code from the original paper is available [here](https://github.com/ahans30/Binoculars/tree/main) and this Jupyter Notebook is available [here](https://github.com/dmicz/devblognotebooks).
 

@@ -1,7 +1,7 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: home
-style: post-cards
+list_title: Posts
 ---
+
+Software engineer at Palantir. New York. I write here about machine learning,
+security, and the things I build.

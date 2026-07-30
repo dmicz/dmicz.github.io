@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "Building a Smart Food Inventory App with Palantir Foundry"
 date:   2025-01-31
 category: software-engineering

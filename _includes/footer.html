@@ -1,13 +1,8 @@
-<footer class="site-footer h-card">
- <data class="u-url" href="{{ "/" | relative_url }}"></data>
-
-  <div class="wrapper">
-
-    <div class="footer-col-wrapper">
-      <p>© {{ "now" | date: "%Y" }} {{ site.author }} | <a href="{{ site.sitesource }}">Source</a></p>
-      
-      <p><small>Press ? for keyboard shortcuts.</small></p>
-    </div>
-  </div>
-
+<footer class="site-footer">
+  <p>
+    &copy; {{ 'now' | date: '%Y' }} {{ site.author }}
+    <span class="hint">&middot;</span> <a href="{{ site.sitesource }}">Source</a>
+    <span class="hint">&middot;</span> <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+  </p>
+  <p class="hint">Press <kbd>?</kbd> for keyboard shortcuts.</p>
 </footer>

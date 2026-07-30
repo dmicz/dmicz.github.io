@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "MNIST Digit Recognition with a Multilayer Perceptron"
 date:   2023-11-03
 category: machine-learning

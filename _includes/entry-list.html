@@ -1,0 +1,20 @@
+{%- comment -%}
+  Dense, year-grouped index. Expects `include.items` sorted newest-first.
+{%- endcomment -%}
+<ul class="entries">
+  {%- assign current_year = '' -%}
+  {%- for item in include.items -%}
+    {%- assign item_year = item.date | date: '%Y' -%}
+    {%- if item_year != current_year -%}
+      <li class="year">{{ item_year }}</li>
+      {%- assign current_year = item_year -%}
+    {%- endif -%}
+    <li>
+      <a class="entry" href="{{ item.url | relative_url }}">
+        <time datetime="{{ item.date | date_to_xmlschema }}">{{ item.date | date: '%b %d' }}</time>
+        <span class="title">{{ item.title | escape }}</span>
+        {%- if item.category %}<span class="cat">{{ item.category }}</span>{% endif -%}
+      </a>
+    </li>
+  {%- endfor -%}
+</ul>

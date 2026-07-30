@@ -1,5 +1,5 @@
 ---
-layout: post
+math: true
 title:  "SVD Image Compression, Explained"
 date:   2023-12-17
 category: machine-learning

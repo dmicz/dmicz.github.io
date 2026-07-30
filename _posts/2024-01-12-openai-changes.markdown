@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "Hidden Changes in GPT-4, Uncovered"
 date:   2024-01-12
 category: machine-learning
