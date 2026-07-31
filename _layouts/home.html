@@ -1,7 +1,6 @@
 ---
 layout: default
 ---
-{%- comment -%}Strip first: an empty page body still yields a newline.{%- endcomment -%}
 {%- assign body = content | strip -%}
 {%- if body != '' -%}
   <div class="intro">{{ content }}</div>

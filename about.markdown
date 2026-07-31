@@ -8,9 +8,6 @@ I'm Dennis Miczek, a software engineer at Palantir in New York, working on
 Foundry. Before that I studied Computer Science at Penn State. All opinions here
 are my own.
 
-This blog is where I work through things in public — mostly machine learning,
-security, and whatever I've been building.
-
 ## Projects
  - [**minViT**](https://github.com/dmicz/minViT) — a Vision Transformer you can read end to end, plus a notebook on finetuning bigger ones.
  - [**devblognotebooks**](https://github.com/dmicz/devblognotebooks) — SVD image compression, PCA and dual PCA on CIFAR-10, detecting AI-generated text with [Binoculars](https://arxiv.org/abs/2401.12070).

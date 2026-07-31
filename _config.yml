@@ -9,8 +9,6 @@ github_username: dmicz
 sitesource: "https://github.com/dmicz/dmicz.github.io"
 google_analytics: G-VHNQNRP552
 
-# jekyll-seo-tag reads these; it emits the description, canonical, Open Graph,
-# Twitter card and JSON-LD tags so head.html doesn't hand-roll any of them.
 twitter:
   username: dennis_miczek
   card: summary
@@ -35,7 +33,6 @@ header_pages:
   - essays.markdown
   - about.markdown
 
-# Layouts live here rather than in every file's front matter.
 defaults:
   - scope:
       path: ""

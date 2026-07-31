@@ -1,6 +1,3 @@
-// Site behaviour: theme toggle, keyboard shortcuts, heading anchors.
-// The initial theme is applied by a blocking snippet in <head> so the page
-// never paints in the wrong scheme; this file only handles interaction.
 (function () {
   "use strict";
 
@@ -20,7 +17,7 @@
     var next = currentTheme() === "dark" ? "light" : "dark";
     button.textContent = "[" + next + "]";
     button.setAttribute("aria-label", "Switch to " + next + " theme");
-    button.hidden = false; // markup ships it hidden so no-JS gets no dead control
+    button.hidden = false;
   }
 
   function setTheme(theme) {
@@ -37,7 +34,6 @@
     setTheme(currentTheme() === "dark" ? "light" : "dark");
   }
 
-  // Follow the OS while the visitor hasn't made an explicit choice.
   systemPrefersDark.addEventListener("change", function () {
     if (!root.dataset.theme) renderToggle();
   });
@@ -85,14 +81,14 @@
       return;
     }
 
+    if (event.key === "t") {
+      toggleTheme();
+      return;
+    }
+
     if (awaitingSecondKey) {
       awaitingSecondKey = false;
       clearTimeout(secondKeyTimer);
-
-      if (event.key === "t") {
-        toggleTheme();
-        return;
-      }
 
       var path = goTo[event.key];
       if (path && path !== window.location.pathname) {

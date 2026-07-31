@@ -3,8 +3,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <script>
-    // Applied before first paint so the page never flashes the wrong theme.
-    // Absent a stored choice, CSS `color-scheme: light dark` follows the OS.
     (function () {
       try {
         var t = localStorage.getItem("theme");
@@ -22,7 +20,6 @@
   {%- feed_meta -%}
 
   {%- if page.math -%}
-  <!-- Config must precede the loader: MathJax reads window.MathJax at startup. -->
   <script>
     window.MathJax = {
       tex: {
