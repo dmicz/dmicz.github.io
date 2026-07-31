@@ -12,6 +12,7 @@ GEM
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0)
     eventmachine (1.2.7)
+    fastimage (2.4.1)
     ffi (1.17.4)
     ffi (1.17.4-aarch64-linux-gnu)
     ffi (1.17.4-aarch64-linux-musl)
@@ -164,6 +165,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  fastimage (~> 2.4)
   jekyll (~> 4.4)
   jekyll-feed (~> 0.17)
   jekyll-seo-tag (~> 2.9)

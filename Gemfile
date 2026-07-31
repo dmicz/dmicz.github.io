@@ -4,6 +4,7 @@ source "https://rubygems.org"
 ruby ">= 3.2"
 
 gem "jekyll", "~> 4.4"
+gem "fastimage", "~> 2.4"
 
 group :jekyll_plugins do
   gem "jekyll-feed", "~> 0.17"

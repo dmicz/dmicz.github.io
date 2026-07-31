@@ -29,6 +29,9 @@ jobs:
           ruby-version: '3.4.5'
           bundler-cache: true
 
+      - name: Install cwebp
+        run: sudo apt-get update && sudo apt-get install -y webp
+
       - name: Build
         # No --baseurl: this is a user site served from the domain root and
         # _config.yml already sets baseurl to "".
