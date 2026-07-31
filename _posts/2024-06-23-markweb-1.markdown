@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "MarkWeb: Kickoff + Dodging a $300/yr SSL Bullet"
 date:   2024-06-23
 category: software-engineering

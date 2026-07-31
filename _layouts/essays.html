@@ -1,34 +1,13 @@
 ---
 layout: default
 ---
+<h1 class="list-heading">{{ page.title | default: 'Essays' }}</h1>
 
-<div class="home">
-  {%- if page.title -%}
-    <h2 class="post-list-heading">{{ page.title }}</h2>
-  {%- endif -%}
+{%- comment -%}Strip first: an empty page body still yields a newline.{%- endcomment -%}
+{%- assign body = content | strip -%}
+{%- if body != '' -%}
+  <div class="intro">{{ content }}</div>
+{%- endif -%}
 
-  {{ content }}
-
-  {%- if site.essays.size > 0 -%}
-    <ul class="post-list">
-      {% assign sorted_essays = site.essays | sort: 'date' | reverse %}
-      {%- for post in sorted_essays -%}
-      <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <h3>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | escape }}
-          </a>
-        </h3>
-        {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
-        {%- endif -%}
-      </li>
-      {%- endfor -%}
-    </ul>
-
-    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
-  {%- endif -%}
-
-</div>
+{%- assign sorted_essays = site.essays | sort: 'date' | reverse -%}
+{%- include entry-list.html items=sorted_essays -%}

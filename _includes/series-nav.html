@@ -1,0 +1,24 @@
+{%- if page.series -%}
+  {%- assign series_posts = site.posts | where: "series", page.series | sort: "date" -%}
+  {%- assign series_index = nil -%}
+  {%- for post in series_posts -%}
+    {%- if post.url == page.url -%}{%- assign series_index = forloop.index0 -%}{%- endif -%}
+  {%- endfor -%}
+  {%- assign last_index = series_posts.size | minus: 1 -%}
+
+  <nav class="series-nav" aria-label="{{ page.series }} series">
+    {%- if series_index > 0 -%}
+      {%- assign prev_index = series_index | minus: 1 -%}
+      {%- assign prev_post = series_posts[prev_index] -%}
+      <a class="prev" href="{{ prev_post.url | relative_url }}">&larr; {{ prev_post.title | escape }}</a>
+    {%- else -%}
+      <span class="start">Start of {{ page.series | escape }}</span>
+    {%- endif -%}
+
+    {%- if series_index < last_index -%}
+      {%- assign next_index = series_index | plus: 1 -%}
+      {%- assign next_post = series_posts[next_index] -%}
+      <a class="next" href="{{ next_post.url | relative_url }}">{{ next_post.title | escape }} &rarr;</a>
+    {%- endif -%}
+  </nav>
+{%- endif -%}

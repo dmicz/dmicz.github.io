@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "MarkWeb: Enhancing performance and usability"
 date:   2024-07-24
 category: software-engineering

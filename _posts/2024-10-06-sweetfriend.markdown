@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "Building SweetFriend in 36 Hours"
 date:   2024-10-06
 category: software-engineering

@@ -1,5 +1,5 @@
 ---
-layout: post
+math: true
 title: "Virtue Ethics is Just Compressed Utilitarianism"
 date:   2025-07-11
 ---

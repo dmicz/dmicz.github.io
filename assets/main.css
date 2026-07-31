@@ -1,0 +1,759 @@
+:root {
+  color-scheme: light dark;
+
+  --font-mono: "SF Mono", SFMono-Regular, ui-monospace, Menlo, Consolas,
+    "Liberation Mono", monospace;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+
+  --measure: 42rem;
+  --size-body: 1.0625rem;
+  --size-mono: 0.8125rem;
+  --size-code: 0.8125rem;
+  --lh-body: 1.65;
+
+  --bg: light-dark(#fcfcfb, #0e0f11);
+  --bg-subtle: light-dark(#f1f1ee, #17191c);
+  --fg: light-dark(#1b1d20, #d2d4d6);
+  --fg-dim: light-dark(#6a6f75, #868b90);
+  --fg-faint: light-dark(#74797e, #7c8186);
+  --rule: light-dark(#e3e3df, #24272b);
+  --accent: light-dark(#0b6e47, #6fcf9c);
+}
+
+@supports not (color: light-dark(#000, #fff)) {
+  :root {
+    --bg: #fcfcfb;
+    --bg-subtle: #f1f1ee;
+    --fg: #1b1d20;
+    --fg-dim: #6a6f75;
+    --fg-faint: #74797e;
+    --rule: #e3e3df;
+    --accent: #0b6e47;
+    --syn-keyword: #8b2fa0;
+    --syn-string: #0b6e47;
+    --syn-number: #a3541a;
+    --syn-ident: #1c5fa8;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+::selection {
+  background: light-dark(#d5e9de, #2b4338);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0 1.25rem;
+  background: var(--bg);
+  color: var(--fg);
+  font: var(--size-body) / var(--lh-body) var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.wrap {
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover,
+a:focus-visible {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+hr {
+  height: 0;
+  margin: 2.5rem 0;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+
+/* ==========================================================================
+   Site header / footer
+   ========================================================================== */
+
+.site-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 3.25rem 0 2.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-mono);
+}
+
+.site-title {
+  color: var(--fg);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.site-title:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 1.25rem;
+  align-items: baseline;
+}
+
+.site-nav a {
+  color: var(--fg-dim);
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.theme-toggle {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--fg-faint);
+  font: inherit;
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  color: var(--accent);
+}
+
+.site-footer {
+  margin-top: 5rem;
+  padding: 1.5rem 0 3.5rem;
+  border-top: 1px solid var(--rule);
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: var(--size-mono);
+  line-height: 1.7;
+}
+
+.site-footer a {
+  color: var(--fg-dim);
+}
+
+.site-footer a:hover {
+  color: var(--accent);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.site-footer .hint {
+  color: var(--fg-faint);
+}
+
+/* ==========================================================================
+   Intro
+   ========================================================================== */
+
+.intro {
+  margin-bottom: 3.5rem;
+}
+
+.intro > *:first-child {
+  margin-top: 0;
+}
+
+.intro > *:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   Post list
+   ========================================================================== */
+
+.list-heading {
+  margin: 0 0 1.25rem;
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: var(--size-mono);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.entries {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--size-mono);
+}
+
+.entries .year {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin: 2rem 0 0.75rem;
+  color: var(--fg-faint);
+}
+
+.entries .year::after {
+  height: 1px;
+  flex: 1;
+  background: var(--rule);
+  content: "";
+}
+
+.entries .year:first-child {
+  margin-top: 0;
+}
+
+.entry {
+  display: flex;
+  gap: 1rem;
+  align-items: baseline;
+  padding: 0.3rem 0;
+  line-height: 1.5;
+}
+
+.entry time {
+  flex: 0 0 3.25rem;
+  color: var(--fg-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.entry .title {
+  color: var(--fg);
+}
+
+.entry:hover .title {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.entry .cat {
+  margin-left: auto;
+  color: var(--fg-faint);
+  white-space: nowrap;
+}
+
+@media (max-width: 34rem) {
+  .entry {
+    flex-wrap: wrap;
+    gap: 0 0.75rem;
+  }
+
+  .entry .cat {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Post header
+   ========================================================================== */
+
+.post-header {
+  margin-bottom: 2.5rem;
+}
+
+.post-title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.post-meta {
+  margin: 0.75rem 0 0;
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: var(--size-mono);
+}
+
+.post-meta .sep {
+  color: var(--fg-faint);
+}
+
+/* ==========================================================================
+   Post content
+   ========================================================================== */
+
+.post-content > *:first-child {
+  margin-top: 0;
+}
+
+.post-content p,
+.post-content ul,
+.post-content ol,
+.post-content dl {
+  margin: 0 0 1.35rem;
+}
+
+.post-content h1,
+.post-content h2,
+.post-content h3,
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  margin: 2.75rem 0 1rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  line-height: 1.35;
+  scroll-margin-top: 1.5rem;
+}
+
+.post-content h1 {
+  font-size: 1.25rem;
+}
+
+.post-content h2 {
+  font-size: 1.0625rem;
+}
+
+.post-content h3 {
+  font-size: 0.9375rem;
+}
+
+.post-content h4,
+.post-content h5,
+.post-content h6 {
+  color: var(--fg-dim);
+  font-size: 0.875rem;
+}
+
+/* Anchors are added by site.js. */
+.heading-anchor {
+  margin-left: 0.4rem;
+  color: var(--fg-faint);
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+:is(h1, h2, h3, h4, h5, h6):hover .heading-anchor,
+.heading-anchor:focus-visible {
+  opacity: 1;
+  text-decoration: none;
+}
+
+.post-content a {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.post-content a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.post-content li {
+  margin-bottom: 0.35rem;
+}
+
+.post-content li > ul,
+.post-content li > ol {
+  margin: 0.35rem 0 0.5rem;
+}
+
+.post-content strong {
+  font-weight: 650;
+}
+
+.post-content blockquote {
+  margin: 1.75rem 0;
+  padding-left: 1.125rem;
+  border-left: 2px solid var(--rule);
+  color: var(--fg-dim);
+}
+
+.post-content blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.post-content img,
+.post-content video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.75rem auto;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+}
+
+/* Inline badges/icons shouldn't get the figure treatment. */
+.post-content p > img:only-child {
+  margin-block: 1.75rem;
+}
+
+.post-content figure {
+  margin: 1.75rem 0;
+}
+
+.post-content figcaption,
+.post-content img + em {
+  display: block;
+  color: var(--fg-dim);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-style: normal;
+  text-align: center;
+}
+
+.post-content table {
+  display: block;
+  width: 100%;
+  margin: 1.75rem 0;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.post-content th,
+.post-content td {
+  padding: 0.4rem 0.75rem 0.4rem 0;
+  border-bottom: 1px solid var(--rule);
+  text-align: left;
+  vertical-align: top;
+}
+
+.post-content th {
+  color: var(--fg-dim);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Code
+   ========================================================================== */
+
+code,
+kbd,
+pre,
+samp {
+  font-family: var(--font-mono);
+}
+
+code {
+  font-size: 0.85em;
+}
+
+:not(pre) > code {
+  padding: 0.1em 0.35em;
+  border-radius: 2px;
+  background: var(--bg-subtle);
+  overflow-wrap: break-word;
+}
+
+pre {
+  margin: 1.75rem 0;
+  padding: 0.875rem 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--bg-subtle);
+  font-size: var(--size-code);
+  line-height: 1.55;
+  tab-size: 4;
+}
+
+pre code {
+  padding: 0;
+  background: none;
+  font-size: inherit;
+  white-space: pre;
+}
+
+.highlight,
+figure.highlight {
+  margin: 0;
+  background: none;
+}
+
+div.highlighter-rouge,
+figure.highlight {
+  margin: 1.75rem 0;
+}
+
+kbd {
+  padding: 0.1em 0.4em;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--bg-subtle);
+  font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   Math — MathJax loads only on pages with `math: true`
+   ========================================================================== */
+
+mjx-container[display="true"] {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* ==========================================================================
+   Series navigation
+   ========================================================================== */
+
+.series-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-top: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: var(--size-mono);
+}
+
+.series-nav .start {
+  color: var(--fg-faint);
+}
+
+.series-nav .next {
+  margin-left: auto;
+  text-align: right;
+}
+
+/* ==========================================================================
+   Keyboard shortcuts panel
+   ========================================================================== */
+
+.shortcuts {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 20;
+  min-width: 15rem;
+  padding: 1rem 1.125rem;
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  background: var(--bg-subtle);
+  box-shadow: 0 8px 24px light-dark(rgb(0 0 0 / 12%), rgb(0 0 0 / 45%));
+  font-family: var(--font-mono);
+  font-size: var(--size-mono);
+}
+
+.shortcuts[hidden] {
+  display: none;
+}
+
+.shortcuts h2 {
+  margin: 0 0 0.75rem;
+  color: var(--fg-dim);
+  font-size: var(--size-mono);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.shortcuts ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shortcuts li {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 0.2rem 0;
+  color: var(--fg-dim);
+}
+
+.shortcuts li span {
+  color: var(--fg);
+}
+
+/* ==========================================================================
+   404
+   ========================================================================== */
+
+.notfound {
+  padding: 4rem 0 6rem;
+  font-family: var(--font-mono);
+  font-size: var(--size-mono);
+}
+
+.notfound h1 {
+  margin: 0 0 0.75rem;
+  font-size: 1.375rem;
+}
+
+.notfound p {
+  margin: 0 0 0.5rem;
+  color: var(--fg-dim);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   Syntax highlighting
+   ========================================================================== */
+
+:root {
+  --syn-comment: var(--fg-faint);
+  --syn-punct: var(--fg-dim);
+  --syn-keyword: light-dark(#8b2fa0, #c792ea);
+  --syn-string: light-dark(#0b6e47, #8fd6a9);
+  --syn-number: light-dark(#a3541a, #e0a06a);
+  --syn-ident: light-dark(#1c5fa8, #7fb6e8);
+}
+
+.highlight .c,
+.highlight .c1,
+.highlight .cm,
+.highlight .cs,
+.highlight .cd {
+  color: var(--syn-comment);
+  font-style: italic;
+}
+
+.highlight .cp {
+  color: var(--syn-comment);
+}
+
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kv,
+.highlight .ow {
+  color: var(--syn-keyword);
+}
+
+.highlight .o,
+.highlight .p,
+.highlight .pi {
+  color: var(--syn-punct);
+}
+
+.highlight .s,
+.highlight .s1,
+.highlight .s2,
+.highlight .sa,
+.highlight .sb,
+.highlight .sc,
+.highlight .sd,
+.highlight .se,
+.highlight .sh,
+.highlight .si,
+.highlight .sx,
+.highlight .sr,
+.highlight .ss,
+.highlight .dl {
+  color: var(--syn-string);
+}
+
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo,
+.highlight .il {
+  color: var(--syn-number);
+}
+
+.highlight .bp,
+.highlight .nb,
+.highlight .nc,
+.highlight .nf,
+.highlight .fm,
+.highlight .nn,
+.highlight .nt,
+.highlight .kt,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi {
+  color: var(--syn-ident);
+}
+
+.highlight .na,
+.highlight .nv,
+.highlight .no,
+.highlight .nl,
+.highlight .py {
+  color: var(--fg);
+}
+
+.highlight .nd,
+.highlight .ni,
+.highlight .ne {
+  color: var(--syn-keyword);
+}
+
+.highlight .err {
+  color: light-dark(#b3261e, #f2857c);
+}
+
+.highlight .gd {
+  color: light-dark(#b3261e, #f2857c);
+}
+
+.highlight .gi {
+  color: var(--syn-string);
+}
+
+.highlight .gh,
+.highlight .gu {
+  color: var(--syn-comment);
+}
+
+.highlight .ge {
+  font-style: italic;
+}
+
+.highlight .gs {
+  font-weight: 600;
+}
+
+/* Line numbers, when a block requests them */
+.highlight .lineno,
+.highlight .gl {
+  padding-right: 0.875rem;
+  color: var(--fg-faint);
+  user-select: none;
+}

@@ -1,5 +1,5 @@
 ---
-layout: post
+math: true
 title:  "minViT: Walkthrough of a minimal Vision Transformer (ViT)"
 date:   2024-05-09
 category: machine-learning

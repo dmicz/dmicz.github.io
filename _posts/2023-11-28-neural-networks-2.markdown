@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "Neural Network Digit Recognition: Part 2"
 date:   2023-11-28
 category: machine-learning

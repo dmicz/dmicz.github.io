@@ -2,25 +2,19 @@
 layout: page
 title: About
 permalink: /about/
-icon: <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
 ---
 
-I'm Dennis Miczek, a Computer Science student at Penn State with a focus on machine learning and software engineering.
-
-Currently, I’m a Software Engineering Intern at Palantir Technologies, where I'm working on building out features for Foundry. All opinions on here are my own.
-
-This blog is a space for technical exploration.
-
-## Expertise
- - **ML**: Deep learning, natural language processing, computer vision
- - **SWE**: Full-stack, APIs, optimization
- - **Tech**: Python, C, C++, Java, SQL, HTML/CSS, JS, Linux, Git
+I'm Dennis Miczek, a software engineer at Palantir in New York, working on
+Foundry. Before that I studied Computer Science at Penn State. All opinions here
+are my own.
 
 ## Projects
- - **minViT**: Vision Tranformer from scratch.
- - **SweetFriend**: AI-powered diabetes management system.
- - More at [GitHub](https://dmicz.github.io)
+ - [**minViT**](https://github.com/dmicz/minViT) — a Vision Transformer you can read end to end, plus a notebook on finetuning bigger ones.
+ - [**devblognotebooks**](https://github.com/dmicz/devblognotebooks) — SVD image compression, PCA and dual PCA on CIFAR-10, detecting AI-generated text with [Binoculars](https://arxiv.org/abs/2401.12070).
+ - [**SweetFriend**](https://github.com/dmicz/SweetFriend) — diabetes app. Live glucose off the Dexcom API, carb estimates from photos of food.
+ - [**NNDigitKit**](https://github.com/dmicz/NNDigitKit) — older C++. MNIST digit recognition with the matrix math written by hand.
+
+More at [GitHub](https://github.com/dmicz).
 
 ## Contact
-Reach out if interested:
-[LinkedIn](https://www.linkedin.com/in/dennis-miczek/) | [Email](mailto:dennis.miczek@gmail.com)
+[LinkedIn](https://www.linkedin.com/in/dennis-miczek/) &middot; [Email](mailto:dennis.miczek@gmail.com)

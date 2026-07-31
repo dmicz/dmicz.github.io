@@ -1,0 +1,50 @@
+name: Build and deploy site
+
+# Builds on every branch so CI can be verified without publishing; only master
+# deploys. Replaces the legacy Pages builder, which ignored Gemfile and built
+# with Jekyll 3.10 instead of the 4.3 this repo pins.
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let an in-flight deploy finish rather than cancelling it midway.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          # Keep in sync with .tool-versions.
+          ruby-version: '3.4.5'
+          bundler-cache: true
+
+      - name: Build
+        # No --baseurl: this is a user site served from the domain root and
+        # _config.yml already sets baseurl to "".
+        run: bundle exec jekyll build
+        env:
+          JEKYLL_ENV: production
+
+      - uses: actions/upload-pages-artifact@v5
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

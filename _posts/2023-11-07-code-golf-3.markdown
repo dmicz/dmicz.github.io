@@ -1,5 +1,4 @@
 ---
-layout: post
 title:  "Code Golf: Challenge 3"
 date:   2023-11-07
 category: code-golf
